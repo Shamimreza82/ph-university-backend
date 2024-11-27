@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { studentService } from './student.service';
 
-const allStudents = async (req: Request, res: Response) => {
+const allStudents = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const result = await studentService.getAllStudentDB();
 
@@ -11,15 +11,11 @@ const allStudents = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Student Retrieve Unsuccessfully',
-      error,
-    });
+    next(error)
   }
 };
 
-const getSingleStudent = async (req: Request, res: Response) => {
+const getSingleStudent = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     console.log(id);
@@ -31,11 +27,7 @@ const getSingleStudent = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Get single Retrieve  Unsuccessfully',
-      error,
-    });
+    next(error)
   }
 };
 

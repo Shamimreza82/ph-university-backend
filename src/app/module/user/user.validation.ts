@@ -2,7 +2,7 @@ import z from 'zod';
 
 const userSchemaValidation = z.object({
   password: z
-    .string({ invalid_type_error: "Name must be a string"})
+    .string({ invalid_type_error: 'Name must be a string' })
     .min(8, 'Password must be at least 8 characters long')
     .max(20, 'Password must be at most 20 characters long')
     .regex(
@@ -11,4 +11,4 @@ const userSchemaValidation = z.object({
     ),
 });
 
-export default userSchemaValidation
+export default userSchemaValidation;

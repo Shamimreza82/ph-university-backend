@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.studentController = void 0;
 const student_service_1 = require("./student.service");
-const allStudents = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const allStudents = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield student_service_1.studentService.getAllStudentDB();
         res.status(200).json({
@@ -21,14 +21,10 @@ const allStudents = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         });
     }
     catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Student Retrieve Unsuccessfully',
-            error,
-        });
+        next(error);
     }
 });
-const getSingleStudent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getSingleStudent = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id } = req.params;
         console.log(id);
@@ -40,11 +36,7 @@ const getSingleStudent = (req, res) => __awaiter(void 0, void 0, void 0, functio
         });
     }
     catch (error) {
-        res.status(500).json({
-            success: false,
-            message: 'Get single Retrieve  Unsuccessfully',
-            error,
-        });
+        next(error);
     }
 });
 exports.studentController = {

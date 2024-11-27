@@ -20,9 +20,9 @@ const createStudentDB = (password, studentData) => __awaiter(void 0, void 0, voi
     ///set student role
     userData.role = 'student';
     userData.id = '203010001';
-    ////create a user first 
+    ////create a user first
     const newUser = yield user_model_1.User.create(userData);
-    ////create a student if user created 
+    ////create a student if user created
     if (Object.keys(newUser).length) {
         studentData.id = newUser.id;
         studentData.user = newUser._id;

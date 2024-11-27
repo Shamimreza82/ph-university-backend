@@ -1,5 +1,3 @@
-
-
 // _id
 // id (generated)
 // password
@@ -9,4 +7,3 @@
 // isDeleted
 // createdAt
 // updatedAt
-

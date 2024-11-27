@@ -1,5 +1,10 @@
-import  { model, Schema, Types } from 'mongoose';
-import { TGuardian, TLocalGuardian, TStudent, TUserName } from './student.interface';
+import { model, Schema } from 'mongoose';
+import {
+  TGuardian,
+  TLocalGuardian,
+  TStudent,
+  TUserName,
+} from './student.interface';
 
 // User Name Schema
 const userNameSchema = new Schema<TUserName>({
@@ -30,8 +35,12 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 const studentSchema = new Schema<TStudent>(
   {
     id: { type: String, required: true, unique: true },
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true },
-    password: { type: String, required: true },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+      unique: true,
+    },
     name: { type: userNameSchema, required: true },
     gender: {
       type: String,
@@ -52,7 +61,7 @@ const studentSchema = new Schema<TStudent>(
     localGuardian: { type: localGuardianSchema, required: true },
     profileImg: { type: String },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export const Student = model<TStudent>('Student', studentSchema);

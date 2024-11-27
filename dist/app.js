@@ -22,4 +22,15 @@ app.use('/api/v1', student_router_1.studentRouter);
 app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json('hello World');
 }));
+/////global error handler
+app.use((err, req, res, next) => {
+    const statusCode = 500;
+    const message = err.message || "Something went wrong";
+    return res.status(statusCode).json({
+        success: false,
+        message: message,
+        error: err,
+        stack: err.stack
+    });
+});
 exports.default = app;

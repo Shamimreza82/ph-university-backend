@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const user_service_1 = require("./user.service");
-const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { password, student: studentData } = req.body;
         // const studentData = studentValidationSchema.safeParse(newStudent)
@@ -22,16 +22,12 @@ const createUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const result = yield user_service_1.UserService.createStudentDB(password, studentData);
         res.status(200).json({
             success: true,
-            message: "Student create successfully",
-            data: result
+            message: 'Student create successfully',
+            data: result,
         });
     }
     catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Student create Unsuccessfully",
-            error,
-        });
+        next(error);
     }
 });
 exports.UserController = {

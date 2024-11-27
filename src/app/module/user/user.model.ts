@@ -1,27 +1,46 @@
-import { model, Schema } from "mongoose";
-import { TUser } from "./user.interface";
+import { model, Schema } from 'mongoose';
+import { TUser } from './user.interface';
+import bcrypt from 'bcrypt'
+import { envFile } from '../../../config';
 
-const userSchema = new Schema<TUser>({
-    id: {type: String, required: true}, 
-    password: {type: String, required: true}, 
-    needsPasswordChange: {type: Boolean, default: true}, 
+const userSchema = new Schema<TUser>(
+  {
+    id: { type: String, required: true },
+    password: { type: String, required: true },
+    needsPasswordChange: { type: Boolean, default: true },
     role: {
-        type: String, 
-        enum: ['admin' , 'student' , 'faculty'], 
-        required: true
-    }, 
+      type: String,
+      enum: ['admin', 'student', 'faculty'],
+      required: true,
+    },
     status: {
-        type: String, 
-        enum: ['in-progress', 'blocked'], 
-        required: true, 
-        default: 'in-progress'
+      type: String,
+      enum: ['in-progress', 'blocked'],
+      required: true,
+      default: 'in-progress',
     },
     isDeleted: {
-        type: Boolean, 
-        default: false
-    }
+      type: Boolean,
+      default: false,
+    },
+  },
+  { timestamps: true },
+);
 
-}, {timestamps: true}) 
+userSchema.pre('save', async function(next){
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this; 
+  console.log(user);
+  const password = await bcrypt.hash(user.password, 10)
+  user.password = password
+  console.log(user);
+  next()
+})
 
-export const User = model<TUser>('User', userSchema)
+userSchema.post('findOne', function(doc, next){
+  doc.password = ''; 
+  next()
+})
 
+
+export const User = model<TUser>('User', userSchema);
