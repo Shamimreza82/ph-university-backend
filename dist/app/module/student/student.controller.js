@@ -8,16 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.studentController = void 0;
 const student_service_1 = require("./student.service");
+const sendRespons_1 = __importDefault(require("../../utils/sendRespons"));
+const http_status_codes_1 = require("http-status-codes");
 const allStudents = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield student_service_1.studentService.getAllStudentDB();
-        res.status(200).json({
+        (0, sendRespons_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.OK,
             success: true,
-            message: 'Student Retrieve successfully',
-            data: result,
+            message: "Student Retrieve successfully",
+            data: result
         });
     }
     catch (error) {
@@ -29,10 +35,11 @@ const getSingleStudent = (req, res, next) => __awaiter(void 0, void 0, void 0, f
         const { id } = req.params;
         console.log(id);
         const result = yield student_service_1.studentService.getSingleStudentDB(id);
-        res.status(200).json({
+        (0, sendRespons_1.default)(res, {
+            statusCode: http_status_codes_1.StatusCodes.OK,
             success: true,
-            message: 'Get single Retrieve successfully',
-            data: result,
+            message: "Get single Retrieve successfully",
+            data: result
         });
     }
     catch (error) {

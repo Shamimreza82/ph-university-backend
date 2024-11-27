@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const student_router_1 = require("./app/module/student/student.router");
 const user_router_1 = require("./app/module/user/user.router");
+const globalErrorHandler_1 = __importDefault(require("./app/middelwares/globalErrorHandler"));
+const notFound_1 = __importDefault(require("./app/middelwares/notFound"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use('/api/v1/users', user_router_1.UserRouter);
@@ -23,14 +25,6 @@ app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json('hello World');
 }));
 /////global error handler
-app.use((err, req, res, next) => {
-    const statusCode = 500;
-    const message = err.message || "Something went wrong";
-    return res.status(statusCode).json({
-        success: false,
-        message: message,
-        error: err,
-        stack: err.stack
-    });
-});
+app.use(globalErrorHandler_1.default);
+app.use(notFound_1.default);
 exports.default = app;

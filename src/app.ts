@@ -1,8 +1,9 @@
 
-import express, {  Request, Response } from 'express';
+import express, { Request, Response } from 'express';
 import { studentRouter } from './app/module/student/student.router';
 import { UserRouter } from './app/module/user/user.router';
-import { error } from 'console';
+import globalErrorHandler from './app/middelwares/globalErrorHandler';
+import notFound from './app/middelwares/notFound';
 
 const app = express();
 
@@ -15,25 +16,9 @@ app.get('/', async (req: Request, res: Response) => {
   res.json('hello World');
 });
 
-
-
 /////global error handler
+app.use(globalErrorHandler)
+app.use(notFound)
 
-
-
-
-app.use((err: any, req:Request, res:Response, next: NextFunction) =>{
- const statusCode = 500 
- const message = err.message || "Something went wrong"
-
- return res.status(statusCode).json({
-  success: false, 
-  message: message,
-  error: err, 
-  stack: err.stack 
-
- })
-
-})
 
 export default app;
