@@ -12,10 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.app = void 0;
 const express_1 = __importDefault(require("express"));
-exports.app = (0, express_1.default)();
-exports.app.use(express_1.default.json());
-exports.app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.send("hello World");
+const student_router_1 = require("./app/module/student/student.router");
+const user_router_1 = require("./app/module/user/user.router");
+const app = (0, express_1.default)();
+app.use(express_1.default.json());
+app.use('/api/v1/users', user_router_1.UserRouter);
+app.use('/api/v1', student_router_1.studentRouter);
+app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.json('hello World');
 }));
+exports.default = app;
