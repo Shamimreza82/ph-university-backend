@@ -25,11 +25,6 @@ const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         //     return;
         // }
         const result = yield user_service_1.UserService.createStudentDB(password, studentData);
-        // res.status(200).json({
-        //   success: true,
-        //   message: 'Student create successfully',
-        //   data: result,
-        // });
         (0, sendRespons_1.default)(res, {
             statusCode: http_status_codes_1.default.OK,
             success: true,

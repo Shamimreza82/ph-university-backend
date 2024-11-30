@@ -1,16 +1,17 @@
 
 import express, { Request, Response } from 'express';
-import { studentRouter } from './app/module/student/student.router';
-import { UserRouter } from './app/module/user/user.router';
 import globalErrorHandler from './app/middelwares/globalErrorHandler';
 import notFound from './app/middelwares/notFound';
+import router from './app/routes';
+
 
 const app = express();
 
 app.use(express.json());
 
-app.use('/api/v1/users', UserRouter);
-app.use('/api/v1', studentRouter);
+app.use('/api/v1', router);
+
+
 
 app.get('/', async (req: Request, res: Response) => {
   res.json('hello World');

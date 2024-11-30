@@ -1,9 +1,14 @@
-import { NextFunction, Request, Response } from 'express';
+import { RequestHandler} from 'express';
 import { UserService } from './user.service';
 import sendResponses from '../../utils/sendRespons';
 import statuscode from 'http-status-codes';
 
-const createUser = async (req: Request, res: Response, next: NextFunction) => {
+
+
+
+
+
+const createStudent: RequestHandler = async (req, res, next) => {
   try {
     const { password, student: studentData } = req.body;
     // const studentData = studentValidationSchema.safeParse(newStudent)
@@ -12,12 +17,6 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
     //     return;
     // }
     const result = await UserService.createStudentDB(password, studentData);
-
-    // res.status(200).json({
-    //   success: true,
-    //   message: 'Student create successfully',
-    //   data: result,
-    // });
 
     sendResponses(res, {
       statusCode: statuscode.OK,
@@ -32,5 +31,5 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const UserController = {
-  createUser,
+  createStudent,
 };

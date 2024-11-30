@@ -13,14 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const student_router_1 = require("./app/module/student/student.router");
-const user_router_1 = require("./app/module/user/user.router");
 const globalErrorHandler_1 = __importDefault(require("./app/middelwares/globalErrorHandler"));
 const notFound_1 = __importDefault(require("./app/middelwares/notFound"));
+const routes_1 = __importDefault(require("./app/routes"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-app.use('/api/v1/users', user_router_1.UserRouter);
-app.use('/api/v1', student_router_1.studentRouter);
+app.use('/api/v1', routes_1.default);
 app.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json('hello World');
 }));

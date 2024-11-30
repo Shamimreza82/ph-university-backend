@@ -18,9 +18,16 @@ const createStudentDB = (password, studentData) => __awaiter(void 0, void 0, voi
     /// if password not provided in data base
     userData.password = password || config_1.envFile.default_password;
     ///set student role
+    const startYear = '2023';
+    const semesterCode = '10';
+    let counter = Math.random();
     userData.role = 'student';
-    userData.id = '203010001';
+    userData.id = `${startYear}${semesterCode} 00 ${counter++}`;
     ////create a user first
+    const existenceCheck = yield student_model_1.Student.find({ id: userData.id });
+    if (existenceCheck) {
+        throw new Error("User already exist in dataBase");
+    }
     const newUser = yield user_model_1.User.create(userData);
     ////create a student if user created
     if (Object.keys(newUser).length) {
