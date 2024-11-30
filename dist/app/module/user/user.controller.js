@@ -16,26 +16,17 @@ exports.UserController = void 0;
 const user_service_1 = require("./user.service");
 const sendRespons_1 = __importDefault(require("../../utils/sendRespons"));
 const http_status_codes_1 = __importDefault(require("http-status-codes"));
-const createUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { password, student: studentData } = req.body;
-        // const studentData = studentValidationSchema.safeParse(newStudent)
-        // if(!studentData.success){
-        //     res.send(studentData.error)
-        //     return;
-        // }
-        const result = yield user_service_1.UserService.createStudentDB(password, studentData);
-        (0, sendRespons_1.default)(res, {
-            statusCode: http_status_codes_1.default.OK,
-            success: true,
-            message: "Student create successfully",
-            data: result
-        });
-    }
-    catch (error) {
-        next(error);
-    }
-});
+const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
+const createStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { password, student: studentData } = req.body;
+    const result = yield user_service_1.UserService.createStudentDB(password, studentData);
+    (0, sendRespons_1.default)(res, {
+        statusCode: http_status_codes_1.default.OK,
+        success: true,
+        message: 'Student create successfully',
+        data: result,
+    });
+}));
 exports.UserController = {
-    createUser,
+    createStudent,
 };

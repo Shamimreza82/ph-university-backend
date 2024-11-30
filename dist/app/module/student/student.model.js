@@ -26,7 +26,6 @@ const localGuardianSchema = new mongoose_1.Schema({
 });
 // Student Schema
 const studentSchema = new mongoose_1.Schema({
-    id: { type: String, required: true, unique: true },
     user: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User',

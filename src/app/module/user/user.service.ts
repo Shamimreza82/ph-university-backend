@@ -11,20 +11,17 @@ const createStudentDB = async (password: string, studentData: TStudent) => {
   userData.password = password || (envFile.default_password as string);
 
   ///set student role
-  const startYear: string = '2023'
-  const semesterCode: string = '10'
-  let counter: number = Math.random()
-  
+
 
   userData.role = 'student';
-  userData.id = `${startYear}${semesterCode} 00 ${counter++}`
+  userData.id = '1215477477'
 
   ////create a user first
-  const existenceCheck = await Student.find({id: userData.id })
+  // const existenceCheck = await Student.find({id: userData.id })
 
-  if(existenceCheck){
-    throw new Error ("User already exist in dataBase")
-  }
+  // if(existenceCheck){
+  //   throw new Error ("User already exist in dataBase")
+  // }
 
 
   const newUser = await User.create(userData);

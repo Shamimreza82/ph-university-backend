@@ -16,36 +16,27 @@ exports.studentController = void 0;
 const student_service_1 = require("./student.service");
 const sendRespons_1 = __importDefault(require("../../utils/sendRespons"));
 const http_status_codes_1 = require("http-status-codes");
-const allStudents = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const result = yield student_service_1.studentService.getAllStudentDB();
-        (0, sendRespons_1.default)(res, {
-            statusCode: http_status_codes_1.StatusCodes.OK,
-            success: true,
-            message: "Student Retrieve successfully",
-            data: result
-        });
-    }
-    catch (error) {
-        next(error);
-    }
-});
-const getSingleStudent = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { id } = req.params;
-        console.log(id);
-        const result = yield student_service_1.studentService.getSingleStudentDB(id);
-        (0, sendRespons_1.default)(res, {
-            statusCode: http_status_codes_1.StatusCodes.OK,
-            success: true,
-            message: "Get single Retrieve successfully",
-            data: result
-        });
-    }
-    catch (error) {
-        next(error);
-    }
-});
+const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
+const allStudents = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield student_service_1.studentService.getAllStudentDB();
+    (0, sendRespons_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: 'Student Retrieve successfully',
+        data: result,
+    });
+}));
+const getSingleStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    console.log(id);
+    const result = yield student_service_1.studentService.getSingleStudentDB(id);
+    (0, sendRespons_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: 'Get single Retrieve successfully',
+        data: result,
+    });
+}));
 exports.studentController = {
     allStudents,
     getSingleStudent,
