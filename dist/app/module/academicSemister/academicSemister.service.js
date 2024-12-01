@@ -12,9 +12,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AcademicSemesterServices = void 0;
 const academicSemister_model_1 = require("./academicSemister.model");
 const createAcademicSemesterDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const academicSemesterNameCodeMapper = {
+        Autumn: '01',
+        Summer: '02',
+        Fall: '03',
+    };
+    if (academicSemesterNameCodeMapper[payload.name] !== payload.code) {
+        throw new Error('Invalid Semester Code');
+    }
     const result = academicSemister_model_1.AcademicSemester.create(payload);
     return result;
 });
+const gteSingleAcademicSemesterDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield academicSemister_model_1.AcademicSemester.findOne({
+        _id: id
+    });
+    return result;
+});
+const gteAllAcademicSemesterDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield academicSemister_model_1.AcademicSemester.find();
+    return result;
+});
 exports.AcademicSemesterServices = {
-    createAcademicSemesterDB
+    createAcademicSemesterDB,
+    gteSingleAcademicSemesterDB,
+    gteAllAcademicSemesterDB
 };
