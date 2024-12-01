@@ -45,9 +45,8 @@ const createStudentValidationSchema = zod_1.z.object({
                 }),
             }),
             dateOfBirth: zod_1.z
-                .string()
-                .optional()
-                .refine((val) => !val || !isNaN(Date.parse(val)), 'Invalid date format'),
+                .date()
+                .optional(),
             email: zod_1.z.string().email('Invalid email format'),
             contactNo: zod_1.z
                 .string()
