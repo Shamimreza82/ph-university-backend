@@ -26,12 +26,13 @@ const createAcademicSemester = (0, catchAsync_1.default)((req, res) => __awaiter
         data: result,
     });
 }));
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getAllAcademicSemester = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield academicSemister_service_1.AcademicSemesterServices.gteAllAcademicSemesterDB();
     (0, sendRespons_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: 'Academic Semester Retrieve Successfully',
+        message: 'All Academic Semester Successfully',
         data: result,
     });
 });
@@ -45,8 +46,19 @@ const getSingleAcademicSemester = (0, catchAsync_1.default)((req, res) => __awai
         data: result,
     });
 }));
+const updateAcademicSemester = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield academicSemister_service_1.AcademicSemesterServices.updateAcademicSemesterDB(req.body, id);
+    (0, sendRespons_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: 'Academic Semester Retrieve Successfully',
+        data: result,
+    });
+}));
 exports.AcademicSemesterController = {
     createAcademicSemester,
     getSingleAcademicSemester,
-    getAllAcademicSemester
+    getAllAcademicSemester,
+    updateAcademicSemester
 };

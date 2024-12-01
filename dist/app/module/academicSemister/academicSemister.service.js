@@ -33,8 +33,23 @@ const gteAllAcademicSemesterDB = () => __awaiter(void 0, void 0, void 0, functio
     const result = yield academicSemister_model_1.AcademicSemester.find();
     return result;
 });
+const updateAcademicSemesterDB = (payload, id) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(payload);
+    console.log(id);
+    const academicSemesterNameCodeMapper = {
+        Autumn: '01',
+        Summer: '02',
+        Fall: '03',
+    };
+    if (academicSemesterNameCodeMapper[payload.name] !== payload.code) {
+        throw new Error('Invalid Semester Code');
+    }
+    const result = academicSemister_model_1.AcademicSemester.findByIdAndUpdate({ _id: id }, { $set: payload }, { new: true });
+    return result;
+});
 exports.AcademicSemesterServices = {
     createAcademicSemesterDB,
     gteSingleAcademicSemesterDB,
-    gteAllAcademicSemesterDB
+    gteAllAcademicSemesterDB,
+    updateAcademicSemesterDB
 };

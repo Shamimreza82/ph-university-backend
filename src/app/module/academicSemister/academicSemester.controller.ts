@@ -16,13 +16,15 @@ const createAcademicSemester = catchAsync(async (req, res) => {
   });
 });
 
-const getAllAcademicSemester = async (req, res) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getAllAcademicSemester = async (req: any, res: any) => {
 
   const result = await AcademicSemesterServices.gteAllAcademicSemesterDB();
+
   sendResponses(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: 'Academic Semester Retrieve Successfully',
+    message: 'All Academic Semester Successfully',
     data: result,
   });
 };
@@ -38,8 +40,21 @@ const getSingleAcademicSemester = catchAsync(async (req, res) => {
   });
 });
 
+const updateAcademicSemester = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await AcademicSemesterServices.updateAcademicSemesterDB(req.body, id);
+  sendResponses(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Academic Semester Retrieve Successfully',
+    data: result,
+  });
+});
+
+
 export const AcademicSemesterController = {
   createAcademicSemester,
   getSingleAcademicSemester,
-  getAllAcademicSemester
+  getAllAcademicSemester, 
+  updateAcademicSemester
 };

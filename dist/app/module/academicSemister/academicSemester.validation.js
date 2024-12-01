@@ -15,8 +15,18 @@ const createAcademicSemesterValidationSchema = zod_1.default.object({
         endMonth: zod_1.default.enum([...academicSemester_constand_1.months]),
     })
 });
+const updateAcademicSemesterValidationSchema = zod_1.default.object({
+    body: zod_1.default.object({
+        name: zod_1.default.enum([...academicSemester_constand_1.AcademicSemesterName]),
+        year: zod_1.default.string(),
+        code: zod_1.default.enum([...academicSemester_constand_1.AcademicSemesterCode]),
+        startMonth: zod_1.default.enum([...academicSemester_constand_1.months]),
+        endMonth: zod_1.default.enum([...academicSemester_constand_1.months]),
+    })
+});
 exports.AcademicSemesterValidation = {
     createAcademicSemesterValidationSchema,
+    updateAcademicSemesterValidationSchema
 };
 // export type TAcademicSemester = {
 //     name: 'Autumn' | 'Summer' | 'Fall';
