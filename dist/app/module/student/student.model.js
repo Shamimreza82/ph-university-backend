@@ -26,6 +26,7 @@ const localGuardianSchema = new mongoose_1.Schema({
 });
 // Student Schema
 const studentSchema = new mongoose_1.Schema({
+    id: { type: String },
     user: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'User',
@@ -51,5 +52,6 @@ const studentSchema = new mongoose_1.Schema({
     guardian: { type: guardianSchema, required: true },
     localGuardian: { type: localGuardianSchema, required: true },
     profileImg: { type: String },
+    admissionSemester: { type: mongoose_1.Schema.Types.ObjectId, ref: "AcademicSemester", required: true }
 }, { timestamps: true });
 exports.Student = (0, mongoose_1.model)('Student', studentSchema);

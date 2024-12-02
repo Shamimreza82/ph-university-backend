@@ -8,29 +8,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const config_1 = require("../../../config");
+const academicSemister_model_1 = require("../academicSemister/academicSemister.model");
 const student_model_1 = require("../student/student.model");
 const user_model_1 = require("./user.model");
-const createStudentDB = (password, studentData) => __awaiter(void 0, void 0, void 0, function* () {
+const user_utils_1 = __importDefault(require("./user.utils"));
+const createStudentDB = (password, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(password);
     const userData = {};
-    /// if password not provided in data base
+    // if password not provided in data base
     userData.password = password || config_1.envFile.default_password;
-    ///set student role
+    //find academic semester info
+    const admissionSemester = yield academicSemister_model_1.AcademicSemester.findById(payload.admissionSemester);
     userData.role = 'student';
-    userData.id = '1215477477';
-    ////create a user first
-    // const existenceCheck = await Student.find({id: userData.id })
-    // if(existenceCheck){
-    //   throw new Error ("User already exist in dataBase")
-    // }
+    userData.id = yield (0, user_utils_1.default)(admissionSemester);
     const newUser = yield user_model_1.User.create(userData);
-    ////create a student if user created
+    //create a student if user created
     if (Object.keys(newUser).length) {
-        studentData.id = newUser.id;
-        studentData.user = newUser._id;
-        const newStudent = yield student_model_1.Student.create(studentData);
+        payload.id = newUser.id;
+        payload.user = newUser._id;
+        const newStudent = yield student_model_1.Student.create(payload);
         return newStudent;
     }
 });

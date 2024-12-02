@@ -37,15 +37,13 @@ const gteAllAcademicSemesterDB = async() => {
 
 const updateAcademicSemesterDB = async (payload: TAcademicSemester, id: string) => {
 
-    console.log(payload);
-    console.log(id);
     const academicSemesterNameCodeMapper: TAcademicSemesterNameCodeMapper = {
       Autumn: '01',
       Summer: '02',
       Fall: '03',
     };
   
-    if (academicSemesterNameCodeMapper[payload.name] !== payload.code) {
+    if (payload.name && payload.code && academicSemesterNameCodeMapper[payload.name] !== payload.code) {
       throw new Error('Invalid Semester Code');
     }
   

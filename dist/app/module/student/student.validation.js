@@ -38,6 +38,7 @@ const createStudentValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         password: zod_1.z.string().max(20),
         student: zod_1.z.object({
+            // id: z.string().nonempty("ID is required"),
             name: userNameValidationSchema,
             gender: zod_1.z.enum(['male', 'female', 'other'], {
                 errorMap: () => ({
@@ -45,7 +46,7 @@ const createStudentValidationSchema = zod_1.z.object({
                 }),
             }),
             dateOfBirth: zod_1.z
-                .date()
+                .string()
                 .optional(),
             email: zod_1.z.string().email('Invalid email format'),
             contactNo: zod_1.z
@@ -64,6 +65,7 @@ const createStudentValidationSchema = zod_1.z.object({
             guardian: guardianValidationSchema,
             localGuardian: localGuardianValidationSchema,
             profileImg: zod_1.z.string().url('Invalid URL').optional(),
+            admissionSemester: zod_1.z.string(),
         }),
     }),
 });
