@@ -10,7 +10,6 @@ import generateStudentId from './user.utils';
 const createStudentDB = async (password: string, payload: TStudent) => {
 
 
-  console.log(password);
   const userData: Partial<TUser> = {};
 
   // if password not provided in data base
@@ -26,7 +25,7 @@ const createStudentDB = async (password: string, payload: TStudent) => {
 
   userData.role = 'student';
  
-  userData.id = await generateStudentId(admissionSemester as TAcademicSemester);
+  userData.id = await generateStudentId(admissionSemester as TAcademicSemester);  
 
 
   const newUser = await User.create(userData);

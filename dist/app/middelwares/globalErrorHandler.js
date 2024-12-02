@@ -15,6 +15,5 @@ const globalErrorHandler = (err, req, res, next) => {
         error: err,
         stack: err.stack,
     });
-    // next()
 };
 exports.default = globalErrorHandler;

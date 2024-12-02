@@ -19,7 +19,6 @@ const student_model_1 = require("../student/student.model");
 const user_model_1 = require("./user.model");
 const user_utils_1 = __importDefault(require("./user.utils"));
 const createStudentDB = (password, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(password);
     const userData = {};
     // if password not provided in data base
     userData.password = password || config_1.envFile.default_password;

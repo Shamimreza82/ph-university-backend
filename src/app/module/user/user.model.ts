@@ -37,10 +37,10 @@ userSchema.pre('save', async function(next){
   next()
 })
 
-userSchema.post('findOne', function(doc, next){
-  doc.password = ''; 
-  next()
-})
+// userSchema.post('findOne', function(doc, next){
+//   doc.password = ''; 
+//   next()
+// })
 
 
 export const User = model<TUser>('User', userSchema);
