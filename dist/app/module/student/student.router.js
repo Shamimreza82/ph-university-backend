@@ -3,11 +3,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.studentRouter = void 0;
+exports.StudentRouter = void 0;
 const express_1 = __importDefault(require("express"));
 const student_controller_1 = require("./student.controller");
 const router = express_1.default.Router();
-router.get('/students/:id', student_controller_1.StudentController.getSingleStudent);
-router.get('/students', student_controller_1.StudentController.allStudents);
-router.delete('/students/:id', student_controller_1.StudentController.deletedStudent);
-exports.studentRouter = router;
+router.get('/:id', student_controller_1.StudentController.getSingleStudent);
+router.get('/', student_controller_1.StudentController.allStudents);
+router.delete('/:id', student_controller_1.StudentController.deletedStudent);
+exports.StudentRouter = router;

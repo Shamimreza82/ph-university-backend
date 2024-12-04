@@ -1,4 +1,6 @@
+import mongoose from 'mongoose';
 import { Student } from './student.model';
+import { User } from '../user/user.model';
 
 
 
@@ -30,7 +32,31 @@ const getSingleStudentDB = async (id: string) => {
 };
 
 
-const deleteStudentDB = (id: string) => {
+const deleteStudentDB = async (id: string) => {
+
+  const session = await mongoose.startSession()
+  try {
+    await session.startTransaction()
+    const deleteUser = await User.findOneAndUpdate({id}, {isDeleted: true}, {new: true, session})
+    if(!deleteUser){
+      throw new Error("fail to deleted student")
+    }
+    const deleteStudent = await Student.findOneAndUpdate({id}, {isDeleted: true}, {new: true, session})
+
+    if(!deleteStudent){
+      throw new Error("fail to deleted student")
+    }
+
+    await session.commitTransaction()
+    await session.endSession()
+
+    return deleteStudent
+
+  } catch (error) {
+    await session.abortTransaction()
+    await session.endSession()
+    console.log(error);
+  }
 
 }
 

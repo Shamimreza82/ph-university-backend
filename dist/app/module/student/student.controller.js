@@ -38,12 +38,12 @@ const getSingleStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 
 }));
 const deletedStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    yield student_service_1.StudentService.deleteStudentDB(id);
+    const result = yield student_service_1.StudentService.deleteStudentDB(id);
     (0, sendRespons_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
         message: 'Student deleted successfully',
-        data: {}
+        data: result
     });
 }));
 exports.StudentController = {
