@@ -23,7 +23,7 @@ const updateAcademicDepartmentValidationSchema = zod_1.z.object({
         academicFaculty: zod_1.z.string({
             invalid_type_error: "Academic Faculty must a string id",
             required_error: "Name must be provided"
-        })
+        }).optional()
     })
 });
 exports.AcademicDepartmentValidation = {

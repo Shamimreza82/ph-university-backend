@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.studentController = void 0;
+exports.StudentController = void 0;
 const student_service_1 = require("./student.service");
 const sendRespons_1 = __importDefault(require("../../utils/sendRespons"));
 const http_status_codes_1 = require("http-status-codes");
@@ -28,7 +28,6 @@ const allStudents = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
 }));
 const getSingleStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    console.log(id);
     const result = yield student_service_1.studentService.getSingleStudentDB(id);
     (0, sendRespons_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
@@ -37,7 +36,18 @@ const getSingleStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 
         data: result,
     });
 }));
-exports.studentController = {
+const deletedStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    yield student_service_1.StudentService.deleteStudentDB(id);
+    (0, sendRespons_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: 'Student deleted successfully',
+        data: {}
+    });
+}));
+exports.StudentController = {
     allStudents,
     getSingleStudent,
+    deletedStudent
 };

@@ -9,17 +9,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.studentService = void 0;
+exports.StudentService = void 0;
 const student_model_1 = require("./student.model");
 const getAllStudentDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield student_model_1.Student.find();
+    const result = yield student_model_1.Student.find().populate('user')
+        .populate({
+        path: 'academicDepartment',
+        populate: {
+            path: 'academicFaculty',
+        },
+    })
+        .populate('admissionSemester');
     return result;
 });
 const getSingleStudentDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield student_model_1.Student.findById(id);
+    const result = yield student_model_1.Student.findById(id)
+        .populate({
+        path: 'academicDepartment',
+        populate: {
+            path: 'academicFaculty',
+        },
+    })
+        .populate('admissionSemester');
     return result;
 });
-exports.studentService = {
+const deleteStudentDB = (id) => {
+};
+exports.StudentService = {
     getAllStudentDB,
     getSingleStudentDB,
+    deleteStudentDB
 };

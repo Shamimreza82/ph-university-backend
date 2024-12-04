@@ -16,15 +16,12 @@ const findLastStudentId = async () => {
       createdAt: -1,
     })
     .lean();
-console.log(lastStudent);
   //203001   0001
   return lastStudent?.id ? lastStudent.id : undefined;
 };
 
 
 const generateStudentId = async (payload: TAcademicSemester) => {
-  console.log("name");
-  console.log("student id",  await findLastStudentId());
   let currentId =  (0).toString();
 
   const lastStudentId =  await findLastStudentId() // student id 2030010001

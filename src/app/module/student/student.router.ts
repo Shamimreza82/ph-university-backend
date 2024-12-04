@@ -1,9 +1,11 @@
 import express from 'express';
-import { studentController } from './student.controller';
+import { StudentController } from './student.controller';
+
 
 const router = express.Router();
 
-router.get('/students/:id', studentController.getSingleStudent);
-router.get('/students', studentController.allStudents);
+router.get('/students/:id', StudentController.getSingleStudent);
+router.get('/students', StudentController.allStudents);
+router.delete('/students/:id', StudentController.deletedStudent);
 
 export const studentRouter = router;

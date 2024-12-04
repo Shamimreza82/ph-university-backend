@@ -1,5 +1,5 @@
 
-import express, { Request, Response } from 'express';
+import express from 'express';
 import globalErrorHandler from './app/middelwares/globalErrorHandler';
 import notFound from './app/middelwares/notFound';
 import router from './app/routes';
@@ -12,10 +12,11 @@ app.use(express.json());
 app.use('/api/v1', router);
 
 
+// const test =  (req: Request, res: Response) => {
 
-app.get('/', async (req: Request, res: Response) => {
-  res.json('hello World');
-});
+// };
+
+// app.use('/', test)
 
 /////global error handler
 app.use(globalErrorHandler)

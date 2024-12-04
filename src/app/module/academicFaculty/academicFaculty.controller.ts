@@ -47,7 +47,7 @@ const updateAcademicFaculty = catchAsync( async (req, res) => {
     sendResponses(res, {
         statusCode: StatusCodes.OK,  
         success: true,
-        message: 'Academic Faculty Retrieve Successfully',
+        message: 'Update Academic Faculty  Successfully',
         data: result,
       });
 })

@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import { envFile } from '../../../config';
 import { AcademicSemester } from '../academicSemister/academicSemister.model';
 import { TAcademicSemester } from '../academicSemister/acadenicSemester.interface';
@@ -7,36 +8,50 @@ import { TUser } from './user.interface';
 import { User } from './user.model';
 import generateStudentId from './user.utils';
 
+
 const createStudentDB = async (password: string, payload: TStudent) => {
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    const userData: Partial<TUser> = {};
 
+    // if password not provided in data base
+    userData.password = password || (envFile.default_password as string);
 
-  const userData: Partial<TUser> = {};
+    //find academic semester info
+    const admissionSemester = await AcademicSemester.findById(
+      payload.admissionSemester,
+    );
 
-  // if password not provided in data base
-  userData.password = password || (envFile.default_password as string);
+    userData.role = 'student';
 
+    userData.id = await generateStudentId(
+      admissionSemester as TAcademicSemester,
+    );
 
-  //find academic semester info
-  const admissionSemester = await AcademicSemester.findById(
-    payload.admissionSemester,
-  );
+    console.log(userData);
+    const newUser = await User.create([userData], {session});
 
-  
+    //create a student if user created
+     if (!newUser.length) {
+      throw new Error('fail to create user');
+    }
+      payload.id = newUser[0].id;
+      payload.user = newUser[0]._id;
 
-  userData.role = 'student';
- 
-  userData.id = await generateStudentId(admissionSemester as TAcademicSemester);  
+      const newStudent = await Student.create([payload], {session});
+      if (!newStudent) {
+        throw new Error('fail to create Student');
+      }
 
+      await session.commitTransaction()
+      await session.endSession()
+      return newStudent;
 
-  const newUser = await User.create(userData);
-
-  //create a student if user created
-  if (Object.keys(newUser).length) {
-    payload.id = newUser.id;
-    payload.user = newUser._id;
-
-    const newStudent = await Student.create(payload);
-    return newStudent;
+  } catch (error) {
+    console.log(error);
+    await session.abortTransaction()
+    await session.endSession()
   }
 };
 

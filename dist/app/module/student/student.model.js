@@ -51,7 +51,9 @@ const studentSchema = new mongoose_1.Schema({
     permanentAddress: { type: String, required: true },
     guardian: { type: guardianSchema, required: true },
     localGuardian: { type: localGuardianSchema, required: true },
+    isDeleted: { type: Boolean, default: false },
     profileImg: { type: String },
+    academicDepartment: { type: mongoose_1.Schema.Types.ObjectId, ref: "AcademicDepartment", required: true },
     admissionSemester: { type: mongoose_1.Schema.Types.ObjectId, ref: "AcademicSemester", required: true }
 }, { timestamps: true });
 exports.Student = (0, mongoose_1.model)('Student', studentSchema);

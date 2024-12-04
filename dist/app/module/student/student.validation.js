@@ -66,6 +66,7 @@ const createStudentValidationSchema = zod_1.z.object({
             localGuardian: localGuardianValidationSchema,
             profileImg: zod_1.z.string().url('Invalid URL').optional(),
             admissionSemester: zod_1.z.string(),
+            academicDepartment: zod_1.z.string()
         }),
     }),
 });

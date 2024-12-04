@@ -30,10 +30,8 @@ const userSchema = new Schema<TUser>(
 userSchema.pre('save', async function(next){
   // eslint-disable-next-line @typescript-eslint/no-this-alias
   const user = this; 
-  console.log(user);
   const password = await bcrypt.hash(user.password, 10)
   user.password = password
-  console.log(user);
   next()
 })
 

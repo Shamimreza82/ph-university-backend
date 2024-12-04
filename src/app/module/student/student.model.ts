@@ -5,6 +5,7 @@ import {
   TStudent,
   TUserName,
 } from './student.interface';
+import { boolean } from 'zod';
 
 // User Name Schema
 const userNameSchema = new Schema<TUserName>({
@@ -59,7 +60,9 @@ const studentSchema = new Schema<TStudent>(
     permanentAddress: { type: String, required: true },
     guardian: { type: guardianSchema, required: true },
     localGuardian: { type: localGuardianSchema, required: true },
+    isDeleted: {type: Boolean, default: false },
     profileImg: { type: String },
+    academicDepartment: {type: Schema.Types.ObjectId, ref: "AcademicDepartment", required: true},
     admissionSemester: {type: Schema.Types.ObjectId, ref: "AcademicSemester", required: true}
   },
   { timestamps: true },

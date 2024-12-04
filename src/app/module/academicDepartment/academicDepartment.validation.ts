@@ -25,7 +25,7 @@ const updateAcademicDepartmentValidationSchema = z.object({
         academicFaculty: z.string({
             invalid_type_error: "Academic Faculty must a string id", 
             required_error: "Name must be provided"
-        })
+        }).optional()
 
     })
 })
