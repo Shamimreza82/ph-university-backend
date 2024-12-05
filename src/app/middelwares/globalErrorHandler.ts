@@ -1,21 +1,62 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import statuscode from 'http-status-codes';
 
-import { NextFunction, Request, Response } from "express";
+import { ErrorRequestHandler } from 'express';
+import { ZodError } from 'zod';
+import { TErrorSource } from '../interface/error';
+import { envFile } from '../../config';
+import handelZodError from '../errors/handelZodError';
+import handelValidationError from '../errors/handelValidationError';
 
 
-const globalErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
-    const message = err.message || 'Something went wrong';
+
+
+const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  let statusCode = err.statusCode || 500;
+  let message = err.message || 'Something went wrong';
+
+
+
+
   
-    res.status(statuscode.NOT_FOUND).json({
-      success: false,
-      message: message,
-      error: err,
-      stack: err.stack,
-    });
+
+
+  let errorSources: TErrorSource = [
+    {
+      path: '',
+      message: 'Something went wrong',
+    },
+  ];
+
+
+
+////////Zor error handel for verieais cases 
+  if (err instanceof ZodError) {
+    const simplifiedError = handelZodError(err);
+    statusCode = simplifiedError?.statusCode; 
+    message = simplifiedError?.message
+    errorSources = simplifiedError?.errorSources
+  } else if (err?.name === 'ValidationError'){
+    const simplifiedError = handelValidationError(err);
+    statusCode = simplifiedError?.statusCode; 
+    message = simplifiedError?.message
+    errorSources = simplifiedError?.errorSources
   }
 
-  export default globalErrorHandler
+ 
 
+
+
+
+
+  res.status(statusCode).json({
+    success: false,
+    message: message,
+    errorSources,
+    stack: envFile.NODE_ENV === 'development' ?  err?.stack : null,
+    // err
+  });
+};
+
+export default globalErrorHandler;

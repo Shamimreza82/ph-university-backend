@@ -30,7 +30,6 @@ const createStudentDB = (password, payload) => __awaiter(void 0, void 0, void 0,
         const admissionSemester = yield academicSemister_model_1.AcademicSemester.findById(payload.admissionSemester);
         userData.role = 'student';
         userData.id = yield (0, user_utils_1.default)(admissionSemester);
-        console.log(userData);
         const newUser = yield user_model_1.User.create([userData], { session });
         //create a student if user created
         if (!newUser.length) {
@@ -45,11 +44,12 @@ const createStudentDB = (password, payload) => __awaiter(void 0, void 0, void 0,
         yield session.commitTransaction();
         yield session.endSession();
         return newStudent;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
     catch (error) {
-        console.log(error);
         yield session.abortTransaction();
         yield session.endSession();
+        throw new Error(error.message || "fail to create student");
     }
 });
 exports.UserService = {

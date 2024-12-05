@@ -18,7 +18,7 @@ const sendRespons_1 = __importDefault(require("../../utils/sendRespons"));
 const http_status_codes_1 = require("http-status-codes");
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const allStudents = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield student_service_1.studentService.getAllStudentDB();
+    const result = yield student_service_1.StudentService.getAllStudentDB();
     (0, sendRespons_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
@@ -28,7 +28,7 @@ const allStudents = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
 }));
 const getSingleStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const result = yield student_service_1.studentService.getSingleStudentDB(id);
+    const result = yield student_service_1.StudentService.getSingleStudentDB(id);
     (0, sendRespons_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
@@ -43,11 +43,23 @@ const deletedStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
         message: 'Student deleted successfully',
-        data: result
+        data: result,
+    });
+}));
+const updateStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const payload = req.body;
+    const result = student_service_1.StudentService.updateStudentDB(id, payload);
+    (0, sendRespons_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: 'Update Student successfully',
+        data: result,
     });
 }));
 exports.StudentController = {
     allStudents,
     getSingleStudent,
-    deletedStudent
+    deletedStudent,
+    updateStudent,
 };

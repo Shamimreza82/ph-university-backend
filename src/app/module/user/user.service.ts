@@ -29,7 +29,6 @@ const createStudentDB = async (password: string, payload: TStudent) => {
       admissionSemester as TAcademicSemester,
     );
 
-    console.log(userData);
     const newUser = await User.create([userData], {session});
 
     //create a student if user created
@@ -48,10 +47,12 @@ const createStudentDB = async (password: string, payload: TStudent) => {
       await session.endSession()
       return newStudent;
 
-  } catch (error) {
-    console.log(error);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
     await session.abortTransaction()
     await session.endSession()
+
+    throw new Error(error.message || "fail to create student")
   }
 };
 

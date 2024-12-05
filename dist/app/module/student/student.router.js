@@ -10,4 +10,5 @@ const router = express_1.default.Router();
 router.get('/:id', student_controller_1.StudentController.getSingleStudent);
 router.get('/', student_controller_1.StudentController.allStudents);
 router.delete('/:id', student_controller_1.StudentController.deletedStudent);
+router.patch('/:id', student_controller_1.StudentController.updateStudent);
 exports.StudentRouter = router;

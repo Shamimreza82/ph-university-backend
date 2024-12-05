@@ -5,7 +5,6 @@ import {
   TStudent,
   TUserName,
 } from './student.interface';
-import { boolean } from 'zod';
 
 // User Name Schema
 const userNameSchema = new Schema<TUserName>({
@@ -49,7 +48,7 @@ const studentSchema = new Schema<TStudent>(
       required: true,
     },
     dateOfBirth: { type: Date },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true},
     contactNo: { type: String, required: true },
     emergencyContactNo: { type: String, required: true },
     bloodGroup: {
@@ -68,7 +67,18 @@ const studentSchema = new Schema<TStudent>(
   { timestamps: true },
 );
 
+studentSchema.pre('save', async function(next){
+  const {email} = this
 
+  const isExistStudent = await Student.findOne({email})
+
+  if(isExistStudent){
+    console.log("Student already exist");
+    throw new Error("Student already exist")
+    
+  }
+  next()
+})
 
 
 export const Student = model<TStudent>('Student', studentSchema);
