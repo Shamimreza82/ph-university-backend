@@ -8,6 +8,7 @@ import { TErrorSource } from '../interface/error';
 import { envFile } from '../../config';
 import handelZodError from '../errors/handelZodError';
 import handelValidationError from '../errors/handelValidationError';
+import handelCastError from '../errors/handelCastError';
 
 
 
@@ -42,10 +43,14 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = simplifiedError?.statusCode; 
     message = simplifiedError?.message
     errorSources = simplifiedError?.errorSources
+  } else if (err.name === "CastError"){
+    const simplifiedError = handelCastError(err);
+    statusCode = simplifiedError?.statusCode; 
+    message = simplifiedError?.message
+    errorSources = simplifiedError?.errorSources
   }
 
  
-
 
 
 
@@ -55,7 +60,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     message: message,
     errorSources,
     stack: envFile.NODE_ENV === 'development' ?  err?.stack : null,
-    // err
+    err
   });
 };
 

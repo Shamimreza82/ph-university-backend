@@ -1,8 +1,8 @@
 import { ZodError, ZodIssue } from "zod";
-import { TErrorSource } from "../interface/error";
+import { TErrorSource, TGenericErrorResponse } from "../interface/error";
 import { StatusCodes } from "http-status-codes";
 
-const handelZodError = (err: ZodError) => {
+const handelZodError = (err: ZodError): TGenericErrorResponse => {
     const errorSources: TErrorSource = err.issues.map((issue: ZodIssue) => {
       return {
         path: issue?.path[issue.path.length - 1],
