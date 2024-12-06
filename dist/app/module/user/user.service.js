@@ -49,7 +49,7 @@ const createStudentDB = (password, payload) => __awaiter(void 0, void 0, void 0,
     catch (error) {
         yield session.abortTransaction();
         yield session.endSession();
-        throw new Error(error.message || "fail to create student");
+        throw new Error(error);
     }
 });
 exports.UserService = {

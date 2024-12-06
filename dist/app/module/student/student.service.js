@@ -27,8 +27,17 @@ exports.StudentService = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const student_model_1 = require("./student.model");
 const user_model_1 = require("../user/user.model");
-const getAllStudentDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield student_model_1.Student.find()
+const getAllStudentDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    let searchTerm = '';
+    if (query === null || query === void 0 ? void 0 : query.searchTerm) {
+        searchTerm = query === null || query === void 0 ? void 0 : query.searchTerm;
+    }
+    ///{email: {$regex: query.searchTerm, $options: i}}
+    const result = yield student_model_1.Student.find({
+        $or: ['email', "name.firstName", "presentAddress"].map(field => ({
+            [field]: { $regex: searchTerm, $options: 'i' }
+        }))
+    })
         .populate('user')
         .populate({
         path: 'academicDepartment',
@@ -65,11 +74,12 @@ const deleteStudentDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
         yield session.commitTransaction();
         yield session.endSession();
         return deleteStudent;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
     catch (error) {
         yield session.abortTransaction();
         yield session.endSession();
-        console.log(error);
+        throw new Error(error);
     }
 });
 const updateStudentDB = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {

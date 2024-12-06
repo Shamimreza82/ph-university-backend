@@ -6,7 +6,8 @@ import { TStudent } from './student.interface';
 import { Student } from './student.model';
 
 const allStudents = catchAsync(async (req, res) => {
-  const result = await StudentService.getAllStudentDB();
+  console.log(req.query);
+  const result = await StudentService.getAllStudentDB(req.query);
 
   sendResponses(res, {
     statusCode: StatusCodes.OK,

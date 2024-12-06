@@ -1,5 +1,5 @@
 
-import express from 'express';
+import express, { Request, Response } from 'express';
 import globalErrorHandler from './app/middelwares/globalErrorHandler';
 import notFound from './app/middelwares/notFound';
 import router from './app/routes';
@@ -12,8 +12,9 @@ app.use(express.json());
 app.use('/api/v1', router);
 
 
-// const test =  (req: Request, res: Response) => {
-
+// const test = async (req: Request, res: Response) => {
+//     Promise.reject()
+//  res.send("test route")
 // };
 
 // app.use('/', test)

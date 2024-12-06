@@ -15,11 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
 const config_1 = require("./config");
 const mongoose_1 = __importDefault(require("mongoose"));
+let server;
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             mongoose_1.default.connect(config_1.envFile.data_base_url);
-            app_1.default.listen(config_1.envFile.port, () => __awaiter(this, void 0, void 0, function* () {
+            server = app_1.default.listen(config_1.envFile.port, () => __awaiter(this, void 0, void 0, function* () {
                 console.log(`server is running on port ${config_1.envFile.port}`);
             }));
         }
@@ -29,3 +30,17 @@ function main() {
     });
 }
 main();
+///// handel  unhandledRejection and  uncaughtException error
+process.on('unhandledRejection', () => {
+    console.log("UnhandledPromiseRejection if deleted, shutting down server ");
+    if (server) {
+        server.close(() => {
+            process.exit(1);
+        });
+    }
+    process.exit(1);
+});
+process.on('uncaughtException', () => {
+    console.log("Uncaught Exception if deleted, shutting down server ");
+    process.exit(1);
+});

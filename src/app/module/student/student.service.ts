@@ -3,8 +3,22 @@ import { Student } from './student.model';
 import { User } from '../user/user.model';
 import { TStudent } from './student.interface';
 
-const getAllStudentDB = async () => {
-  const result = await Student.find()
+const getAllStudentDB = async (query: Record<string, unknown>) => {
+
+
+  let searchTerm = ''
+  if(query?.searchTerm){
+    searchTerm = query?.searchTerm as string
+  }
+
+
+///{email: {$regex: query.searchTerm, $options: i}}
+
+  const result = await Student.find({
+    $or: ['email', "name.firstName", "presentAddress"].map(field => ({
+      [field] : {$regex: searchTerm, $options: 'i'}
+    }))
+  })
     .populate('user')
     .populate({
       path: 'academicDepartment',
@@ -54,10 +68,11 @@ const deleteStudentDB = async (id: string) => {
     await session.endSession();
 
     return deleteStudent;
-  } catch (error) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
-    console.log(error);
+    throw new Error(error)
   }
 };
 

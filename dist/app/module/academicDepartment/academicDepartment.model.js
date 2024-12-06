@@ -21,7 +21,7 @@ const academicDepartmentSchema = new mongoose_1.Schema({
     academicFaculty: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: 'AcademicFaculty',
-        unique: true,
+        unique: true
     },
 }, {
     timestamps: true,

@@ -10,7 +10,9 @@ const routes_1 = __importDefault(require("./app/routes"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use('/api/v1', routes_1.default);
-// const test =  (req: Request, res: Response) => {
+// const test = async (req: Request, res: Response) => {
+//     Promise.reject()
+//  res.send("test route")
 // };
 // app.use('/', test)
 /////global error handler

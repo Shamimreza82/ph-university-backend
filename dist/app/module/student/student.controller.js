@@ -18,7 +18,8 @@ const sendRespons_1 = __importDefault(require("../../utils/sendRespons"));
 const http_status_codes_1 = require("http-status-codes");
 const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const allStudents = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield student_service_1.StudentService.getAllStudentDB();
+    console.log(req.query);
+    const result = yield student_service_1.StudentService.getAllStudentDB(req.query);
     (0, sendRespons_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,

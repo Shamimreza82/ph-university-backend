@@ -5,6 +5,7 @@ import {
   TStudent,
   TUserName,
 } from './student.interface';
+import AppError from '../../errors/AppError';
 
 // User Name Schema
 const userNameSchema = new Schema<TUserName>({
@@ -34,7 +35,7 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 // Student Schema
 const studentSchema = new Schema<TStudent>(
   {
-    id: {type: String},
+    id: { type: String },
     user: {
       type: Schema.Types.ObjectId,
       ref: 'User',
@@ -48,7 +49,7 @@ const studentSchema = new Schema<TStudent>(
       required: true,
     },
     dateOfBirth: { type: Date },
-    email: { type: String, required: true},
+    email: { type: String, required: true },
     contactNo: { type: String, required: true },
     emergencyContactNo: { type: String, required: true },
     bloodGroup: {
@@ -59,26 +60,31 @@ const studentSchema = new Schema<TStudent>(
     permanentAddress: { type: String, required: true },
     guardian: { type: guardianSchema, required: true },
     localGuardian: { type: localGuardianSchema, required: true },
-    isDeleted: {type: Boolean, default: false },
+    isDeleted: { type: Boolean, default: false },
     profileImg: { type: String },
-    academicDepartment: {type: Schema.Types.ObjectId, ref: "AcademicDepartment", required: true},
-    admissionSemester: {type: Schema.Types.ObjectId, ref: "AcademicSemester", required: true}
+    academicDepartment: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicDepartment',
+      required: true,
+    },
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicSemester',
+      required: true,
+    },
   },
   { timestamps: true },
 );
 
-studentSchema.pre('save', async function(next){
-  const {email} = this
+studentSchema.pre('save', async function (next) {
+  const { email } = this;
 
-  const isExistStudent = await Student.findOne({email})
+  const isExistStudent = await Student.findOne({ email });
 
-  if(isExistStudent){
-    console.log("Student already exist");
-    throw new Error("Student already exist")
-    
+  if (isExistStudent) {
+    throw new Error('Student already exist');
   }
-  next()
-})
-
+  next();
+});
 
 export const Student = model<TStudent>('Student', studentSchema);

@@ -62,16 +62,23 @@ const studentSchema = new mongoose_1.Schema({
     localGuardian: { type: localGuardianSchema, required: true },
     isDeleted: { type: Boolean, default: false },
     profileImg: { type: String },
-    academicDepartment: { type: mongoose_1.Schema.Types.ObjectId, ref: "AcademicDepartment", required: true },
-    admissionSemester: { type: mongoose_1.Schema.Types.ObjectId, ref: "AcademicSemester", required: true }
+    academicDepartment: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'AcademicDepartment',
+        required: true,
+    },
+    admissionSemester: {
+        type: mongoose_1.Schema.Types.ObjectId,
+        ref: 'AcademicSemester',
+        required: true,
+    },
 }, { timestamps: true });
 studentSchema.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         const { email } = this;
         const isExistStudent = yield exports.Student.findOne({ email });
         if (isExistStudent) {
-            console.log("Student already exist");
-            throw new Error("Student already exist");
+            throw new Error('Student already exist');
         }
         next();
     });
