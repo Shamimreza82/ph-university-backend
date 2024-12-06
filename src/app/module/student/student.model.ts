@@ -5,7 +5,7 @@ import {
   TStudent,
   TUserName,
 } from './student.interface';
-import AppError from '../../errors/AppError';
+
 
 // User Name Schema
 const userNameSchema = new Schema<TUserName>({

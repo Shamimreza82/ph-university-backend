@@ -4,28 +4,20 @@ import { User } from '../user/user.model';
 import { TStudent } from './student.interface';
 
 const getAllStudentDB = async (query: Record<string, unknown>) => {
-
-
   const queryObj = {...query}
-
-
-
+  
   let searchTerm = '';
   if (query?.searchTerm) {
     searchTerm = query?.searchTerm as string;
   }
-
     const studentSearchableFields = ['email', 'name.firstName', 'presentAddress']
   ///{email: {$regex: query.searchTerm, $options: i}}
-
-
   ////////
 const searchQuery = Student.find({
   $or: studentSearchableFields.map((field) => ({
     [field]: { $regex: searchTerm, $options: 'i' },
   })),
 })
-
 ////filtering
 const excludefilds = ['searchTerm', 'sort', "limit", "page", "fields"]
 excludefilds.forEach(el => delete queryObj[el])
