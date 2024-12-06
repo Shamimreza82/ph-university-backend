@@ -28,16 +28,25 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const student_model_1 = require("./student.model");
 const user_model_1 = require("../user/user.model");
 const getAllStudentDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const queryObj = Object.assign({}, query);
     let searchTerm = '';
     if (query === null || query === void 0 ? void 0 : query.searchTerm) {
         searchTerm = query === null || query === void 0 ? void 0 : query.searchTerm;
     }
+    const studentSearchableFields = ['email', 'name.firstName', 'presentAddress'];
     ///{email: {$regex: query.searchTerm, $options: i}}
-    const result = yield student_model_1.Student.find({
-        $or: ['email', "name.firstName", "presentAddress"].map(field => ({
-            [field]: { $regex: searchTerm, $options: 'i' }
-        }))
-    })
+    ////////
+    const searchQuery = student_model_1.Student.find({
+        $or: studentSearchableFields.map((field) => ({
+            [field]: { $regex: searchTerm, $options: 'i' },
+        })),
+    });
+    ////filtering
+    const excludefilds = ['searchTerm', 'sort', "limit", "page", "fields"];
+    excludefilds.forEach(el => delete queryObj[el]);
+    console.log({ query }, { queryObj });
+    ////search 
+    const filterQuery = searchQuery.find(queryObj)
         .populate('user')
         .populate({
         path: 'academicDepartment',
@@ -46,7 +55,32 @@ const getAllStudentDB = (query) => __awaiter(void 0, void 0, void 0, function* (
         },
     })
         .populate('admissionSemester');
-    return result;
+    let sort = 'createdAt';
+    if (query === null || query === void 0 ? void 0 : query.sort) {
+        sort = query === null || query === void 0 ? void 0 : query.sort;
+    }
+    ////// sort 
+    const sortQuery = filterQuery.sort(sort);
+    let page = 1;
+    let limit = 1;
+    let skip = 0;
+    if (query === null || query === void 0 ? void 0 : query.limit) {
+        limit = Number(query === null || query === void 0 ? void 0 : query.limit);
+        skip = (page - 1) * limit;
+    }
+    if (query.page) {
+        page = Number(query.page);
+    }
+    const paginateQuery = sortQuery.skip(skip);
+    const limitQuery = paginateQuery.limit(limit);
+    ////filds limiting
+    let fields = '-__v';
+    if (query.fields) {
+        fields = query.fields.split(',').join(' ');
+        console.log({ fields });
+    }
+    const fieldsQuery = yield limitQuery.select(fields);
+    return fieldsQuery;
 });
 const getSingleStudentDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield student_model_1.Student.findById(id)
@@ -90,5 +124,5 @@ exports.StudentService = {
     getAllStudentDB,
     getSingleStudentDB,
     deleteStudentDB,
-    updateStudentDB
+    updateStudentDB,
 };
