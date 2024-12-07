@@ -80,7 +80,7 @@ const createStudentDB = (password, payload) => __awaiter(void 0, void 0, void 0,
 ///// create faculty///////////////////////////////
 const createFacultyDB = (password, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const userFacultyObj = {};
-    userFacultyObj.id = yield (0, user_utils_1.generateFacultyId)("F");
+    userFacultyObj.id = yield (0, user_utils_1.generateFacultyId)('F');
     userFacultyObj.role = 'faculty';
     userFacultyObj.password = config_1.envFile.default_password || password;
     const userFaculty = yield user_model_1.User.create(userFacultyObj);
@@ -93,20 +93,32 @@ const createFacultyDB = (password, payload) => __awaiter(void 0, void 0, void 0,
 });
 ///// create faculty/////////////////////////////////
 const createAdminDB = (password, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const userAdminObj = {};
-    userAdminObj.id = yield (0, user_utils_1.generateAdminId)('A');
-    userAdminObj.role = 'admin';
-    userAdminObj.password = config_1.envFile.default_password || password;
-    const userAdmin = yield user_model_1.User.create(userAdminObj);
-    if (userAdmin) {
-        payload.id = userAdmin.id;
-        payload.user = userAdmin._id;
+    const session = yield mongoose_1.default.startSession();
+    try {
+        yield session.startTransaction();
+        const userAdminObj = {};
+        userAdminObj.id = yield (0, user_utils_1.generateAdminId)('A');
+        userAdminObj.role = 'admin';
+        userAdminObj.password = config_1.envFile.default_password || password;
+        const userAdmin = yield user_model_1.User.create([userAdminObj], { session });
+        if (userAdmin) {
+            payload.id = userAdmin[0].id;
+            payload.user = userAdmin[0]._id;
+        }
+        const newAdmin = yield admin_model_1.Admin.create([payload], { session });
+        yield session.commitTransaction();
+        yield session.endSession();
+        return newAdmin[0];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
-    const newAdmin = yield admin_model_1.Admin.create(payload);
-    return newAdmin;
+    catch (error) {
+        yield session.abortTransaction();
+        yield session.endSession();
+        throw new Error(error);
+    }
 });
 exports.UserService = {
     createStudentDB,
     createFacultyDB,
-    createAdminDB
+    createAdminDB,
 };

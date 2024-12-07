@@ -42,7 +42,8 @@ const deletedStudent = catchAsync(async (req, res) => {
 const updateStudent = catchAsync(async (req, res) => {
   const {id} = req.params
   const payload = req.body
-  const result = StudentService.updateStudentDB(id, payload);
+  console.log(payload );
+  const result = await StudentService.updateStudentDB(id, payload);
 
   sendResponses(res, {
     statusCode: StatusCodes.OK,

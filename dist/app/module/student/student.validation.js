@@ -70,6 +70,43 @@ const createStudentValidationSchema = zod_1.z.object({
         }),
     }),
 });
+const updateStudentValidationSchema = zod_1.z.object({
+    body: zod_1.z.object({
+        password: zod_1.z.string().max(20),
+        student: zod_1.z.object({
+            // id: z.string().nonempty("ID is required"),
+            name: userNameValidationSchema.optional(),
+            gender: zod_1.z.enum(['male', 'female', 'other'], {
+                errorMap: () => ({
+                    message: "Gender must be 'male', 'female', or 'other'",
+                }),
+            }).optional(),
+            dateOfBirth: zod_1.z
+                .string()
+                .optional(),
+            email: zod_1.z.string().email('Invalid email format').optional(),
+            contactNo: zod_1.z
+                .string()
+                .nonempty('Contact number is required')
+                .regex(/^\d{10,15}$/, 'Invalid contact number format').optional(),
+            emergencyContactNo: zod_1.z
+                .string()
+                .nonempty('Emergency contact number is required')
+                .regex(/^\d{10,15}$/, 'Invalid contact number format').optional(),
+            bloodGroup: zod_1.z
+                .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
+                .optional(),
+            presentAddress: zod_1.z.string().nonempty('Present address is required').optional(),
+            permanentAddress: zod_1.z.string().nonempty('Permanent address is required').optional(),
+            guardian: guardianValidationSchema.optional(),
+            localGuardian: localGuardianValidationSchema.optional(),
+            profileImg: zod_1.z.string().url('Invalid URL').optional(),
+            admissionSemester: zod_1.z.string().optional(),
+            academicDepartment: zod_1.z.string().optional(),
+        }),
+    }),
+});
 exports.studentValidations = {
     createStudentValidationSchema,
+    updateStudentValidationSchema
 };

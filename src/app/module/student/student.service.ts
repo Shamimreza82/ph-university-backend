@@ -122,8 +122,9 @@ const deleteStudentDB = async (id: string) => {
 };
 
 const updateStudentDB = async (id: string, payload: TStudent) => {
-  const { name, guardian, localGuardian, ...remaining } = payload;
-  console.log(name);
+  const student = payload.student 
+  const result = await Student.findOneAndUpdate({id}, student, {new: true} )
+  return result
 };
 
 export const StudentService = {

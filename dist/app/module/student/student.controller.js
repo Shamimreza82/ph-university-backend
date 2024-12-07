@@ -50,7 +50,8 @@ const deletedStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
 const updateStudent = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     const payload = req.body;
-    const result = student_service_1.StudentService.updateStudentDB(id, payload);
+    console.log(payload);
+    const result = yield student_service_1.StudentService.updateStudentDB(id, payload);
     (0, sendRespons_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,

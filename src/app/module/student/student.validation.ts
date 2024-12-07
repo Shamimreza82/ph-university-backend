@@ -72,6 +72,44 @@ const createStudentValidationSchema = z.object({
   }),
 });
 
+const updateStudentValidationSchema = z.object({
+  body: z.object({
+    password: z.string().max(20),
+    student: z.object({
+      // id: z.string().nonempty("ID is required"),
+      name: userNameValidationSchema.optional(),
+      gender: z.enum(['male', 'female', 'other'], {
+        errorMap: () => ({
+          message: "Gender must be 'male', 'female', or 'other'",
+        }),
+      }).optional(),
+      dateOfBirth: z
+        .string()
+        .optional(),
+      email: z.string().email('Invalid email format').optional(),
+      contactNo: z
+        .string()
+        .nonempty('Contact number is required')
+        .regex(/^\d{10,15}$/, 'Invalid contact number format').optional(),
+      emergencyContactNo: z
+        .string()
+        .nonempty('Emergency contact number is required')
+        .regex(/^\d{10,15}$/, 'Invalid contact number format').optional(),
+      bloodGroup: z
+        .enum(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'])
+        .optional(),
+      presentAddress: z.string().nonempty('Present address is required').optional(),
+      permanentAddress: z.string().nonempty('Permanent address is required').optional(),
+      guardian: guardianValidationSchema.optional(),
+      localGuardian: localGuardianValidationSchema.optional(),
+      profileImg: z.string().url('Invalid URL').optional(),
+      admissionSemester : z.string().optional(),
+      academicDepartment: z.string().optional(),
+    }),
+  }),
+});
+
 export const studentValidations = {
   createStudentValidationSchema,
+  updateStudentValidationSchema
 };

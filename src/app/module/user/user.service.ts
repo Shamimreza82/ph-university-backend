@@ -8,9 +8,13 @@ import { TUser } from './user.interface';
 import { User } from './user.model';
 import { TFaculty } from '../faculty/faculty.interface';
 import { Faculty } from '../faculty/faculty.model';
-import generateStudentId, { generateAdminId, generateFacultyId } from './user.utils';
+import generateStudentId, {
+  generateAdminId,
+  generateFacultyId,
+} from './user.utils';
 import { TAdmin } from '../admin/admin.interface';
 import { Admin } from '../admin/admin.model';
+
 
 
 
@@ -34,89 +38,90 @@ const createStudentDB = async (password: string, payload: TStudent) => {
       admissionSemester as TAcademicSemester,
     );
 
-    const newUser = await User.create([userData], {session});
+    const newUser = await User.create([userData], { session });
 
     //create a student if user created
-     if (!newUser.length) {
+    if (!newUser.length) {
       throw new Error('fail to create user');
     }
-      payload.id = newUser[0].id;
-      payload.user = newUser[0]._id;
+    payload.id = newUser[0].id;
+    payload.user = newUser[0]._id;
 
-      const newStudent = await Student.create([payload], {session});
-      if (!newStudent) {
-        throw new Error('fail to create Student');
-      }
+    const newStudent = await Student.create([payload], { session });
+    if (!newStudent) {
+      throw new Error('fail to create Student');
+    }
 
-      await session.commitTransaction()
-      await session.endSession()
-      return newStudent;
+    await session.commitTransaction();
+    await session.endSession();
+    return newStudent;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    await session.abortTransaction()
-    await session.endSession()
+    await session.abortTransaction();
+    await session.endSession();
 
-    throw new Error(error)
+    throw new Error(error);
   }
 };
-
-
 
 ///// create faculty///////////////////////////////
 
 const createFacultyDB = async (password: string, payload: TFaculty) => {
+  const userFacultyObj: Record<string, unknown> = {};
 
+  userFacultyObj.id = await generateFacultyId('F');
+  userFacultyObj.role = 'faculty';
+  userFacultyObj.password = envFile.default_password || password;
 
-const userFacultyObj: Record<string, unknown> = {}
+  const userFaculty = await User.create(userFacultyObj);
 
-userFacultyObj.id = await generateFacultyId("F") 
-userFacultyObj.role = 'faculty'
-userFacultyObj.password = envFile.default_password || password
+  if (userFaculty) {
+    payload.id = userFaculty.id;
+    payload.user = userFaculty._id;
+  }
 
-const userFaculty = await User.create(userFacultyObj)
+  const newFaculty = await Faculty.create(payload);
 
-if(userFaculty){
-  payload.id = userFaculty.id
-  payload.user = userFaculty._id
-}
-
-const newFaculty = await Faculty.create(payload)
-
-return newFaculty
-}
-
-
-
+  return newFaculty;
+};
 
 ///// create faculty/////////////////////////////////
 
 const createAdminDB = async (password: string, payload: TAdmin) => {
 
+  const session = await mongoose.startSession()
+  try {
+    await session.startTransaction()
 
-const userAdminObj: Record<string, unknown> = {}
+    const userAdminObj: Record<string, unknown> = {};
 
-userAdminObj.id = await generateAdminId('A')
-userAdminObj.role = 'admin'
-userAdminObj.password = envFile.default_password || password
+    userAdminObj.id = await generateAdminId('A');
+    userAdminObj.role = 'admin';
+    userAdminObj.password = envFile.default_password || password;
 
-const userAdmin = await User.create(userAdminObj)
+    const userAdmin = await User.create([userAdminObj], {session});
 
-if(userAdmin){
-  payload.id = userAdmin.id
-  payload.user = userAdmin._id
-}
+    if (userAdmin) {
+      payload.id = userAdmin[0].id;
+      payload.user = userAdmin[0]._id;
+    }
 
-const newAdmin = await Admin.create(payload)
+    const newAdmin = await Admin.create([payload], {session});
 
-return newAdmin
-}
-
-
-
+    await session.commitTransaction()
+    await session.endSession()
+    return newAdmin[0];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    await session.abortTransaction()
+    await session.endSession()
+    throw new Error(error)
+  }
+};
 
 export const UserService = {
   createStudentDB,
-  createFacultyDB, 
-  createAdminDB
+  createFacultyDB,
+  createAdminDB,
 };
