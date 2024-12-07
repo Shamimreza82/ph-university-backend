@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.facultyValidation = void 0;
+exports.AdminValidation = void 0;
 const zod_1 = require("zod");
 const userNameSchema = zod_1.z.object({
     firstName: zod_1.z.string(),
     middleName: zod_1.z.string(),
     lastName: zod_1.z.string(),
 });
-const createFacultyValidationSchema = zod_1.z.object({
+const createAdminValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         password: zod_1.z.string(),
-        faculty: zod_1.z.object({
-            // id: z.string().optional(),
+        admin: zod_1.z.object({
+            id: zod_1.z.string().optional(),
             name: userNameSchema,
             designation: zod_1.z.string({
                 required_error: 'user is require',
@@ -29,10 +29,10 @@ const createFacultyValidationSchema = zod_1.z.object({
         }),
     }),
 });
-const updateFacultyValidationSchema = zod_1.z.object({
+const updateAdminValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
         password: zod_1.z.string().optional(),
-        faculty: zod_1.z.object({
+        admin: zod_1.z.object({
             // id: z.string().optional(),
             name: userNameSchema.optional(),
             designation: zod_1.z.string({
@@ -51,7 +51,7 @@ const updateFacultyValidationSchema = zod_1.z.object({
         }),
     }),
 });
-exports.facultyValidation = {
-    createFacultyValidationSchema,
-    updateFacultyValidationSchema
+exports.AdminValidation = {
+    createAdminValidationSchema,
+    updateAdminValidationSchema
 };

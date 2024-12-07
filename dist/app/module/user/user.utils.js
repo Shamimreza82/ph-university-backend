@@ -9,10 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.generateAdminId = exports.generateFacultyId = void 0;
 const user_model_1 = require("./user.model");
-const findLastStudentId = () => __awaiter(void 0, void 0, void 0, function* () {
+const findLastStudentId = (role) => __awaiter(void 0, void 0, void 0, function* () {
     const lastStudent = yield user_model_1.User.findOne({
-        role: 'student',
+        role: role,
     }, {
         id: 1,
         _id: 0,
@@ -26,12 +27,14 @@ const findLastStudentId = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 const generateStudentId = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     let currentId = (0).toString();
-    const lastStudentId = yield findLastStudentId(); // student id 2030010001
+    const lastStudentId = yield findLastStudentId('student'); // student id 2030010001
     const lastStudentSemesterCode = lastStudentId === null || lastStudentId === void 0 ? void 0 : lastStudentId.substring(4, 6); // 01
     const lastStudentYear = lastStudentId === null || lastStudentId === void 0 ? void 0 : lastStudentId.substring(0, 4); // 2030
     const currentSemesterCode = payload.code;
     const currentYear = payload.year;
-    if (lastStudentId && lastStudentSemesterCode === currentSemesterCode && lastStudentYear === currentYear) {
+    if (lastStudentId &&
+        lastStudentSemesterCode === currentSemesterCode &&
+        lastStudentYear === currentYear) {
         currentId = lastStudentId.substring(6); /// 0001
     }
     let incrementId = (Number(currentId) + 1).toString().padStart(4, '0');
@@ -39,3 +42,53 @@ const generateStudentId = (payload) => __awaiter(void 0, void 0, void 0, functio
     return incrementId;
 });
 exports.default = generateStudentId;
+///////////
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const findFacultyLastId = () => __awaiter(void 0, void 0, void 0, function* () {
+    const lastStudent = yield user_model_1.User.findOne({
+        role: 'faculty',
+    }, {
+        id: 1,
+        _id: 0,
+    })
+        .sort({
+        createdAt: -1,
+    }).lean();
+    //203001   0001
+    return (lastStudent === null || lastStudent === void 0 ? void 0 : lastStudent.id) ? lastStudent === null || lastStudent === void 0 ? void 0 : lastStudent.id : undefined;
+});
+const generateFacultyId = (Prefix) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = yield findFacultyLastId();
+    console.log(id);
+    const formateId = Number(id.split('-')[1]);
+    const number = (Number(formateId) + 1).toString().padStart(4, '0') || '0001';
+    const newNumber = number || '0001';
+    const newId = `${Prefix}-${newNumber}`;
+    return newId;
+});
+exports.generateFacultyId = generateFacultyId;
+//////////////
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const findAdminLastId = () => __awaiter(void 0, void 0, void 0, function* () {
+    const lastStudent = yield user_model_1.User.findOne({
+        role: 'admin',
+    }, {
+        id: 1,
+        _id: 0,
+    })
+        .sort({
+        createdAt: -1,
+    }).lean();
+    //203001   0001
+    return (lastStudent === null || lastStudent === void 0 ? void 0 : lastStudent.id) ? lastStudent === null || lastStudent === void 0 ? void 0 : lastStudent.id : undefined;
+});
+const generateAdminId = (Prefix) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = yield findAdminLastId();
+    console.log(id);
+    const formateId = Number(id.split('-')[1]);
+    const number = (Number(formateId) + 1).toString().padStart(4, '0') || '0001';
+    const newNumber = number || '0001';
+    const newId = `${Prefix}-${newNumber}`;
+    return newId;
+});
+exports.generateAdminId = generateAdminId;

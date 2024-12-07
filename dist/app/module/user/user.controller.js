@@ -38,7 +38,18 @@ const createFaculty = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         data: result,
     });
 }));
+const createAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { password, admin: adminData } = req.body;
+    const result = yield user_service_1.UserService.createAdminDB(password, adminData);
+    (0, sendRespons_1.default)(res, {
+        statusCode: http_status_codes_1.default.OK,
+        success: true,
+        message: 'Admin create successfully',
+        data: result,
+    });
+}));
 exports.UserController = {
     createStudent,
-    createFaculty
+    createFaculty,
+    createAdmin
 };

@@ -7,11 +7,11 @@ const userNameSchema = z.object({
   lastName: z.string(),
 });
 
-const createFacultyValidationSchema = z.object({
+const createAdminValidationSchema = z.object({
   body: z.object({
     password: z.string(),
-    faculty: z.object({
-      // id: z.string().optional(),
+    admin: z.object({
+      id: z.string().optional(),
       name: userNameSchema,
       designation: z.string({
         required_error: 'user is require',
@@ -30,10 +30,10 @@ const createFacultyValidationSchema = z.object({
   }),
 });
 
-const updateFacultyValidationSchema = z.object({
+const updateAdminValidationSchema = z.object({
   body: z.object({
     password: z.string().optional(),
-    faculty: z.object({
+    admin: z.object({
       // id: z.string().optional(),
       name: userNameSchema.optional(),
       designation: z.string({
@@ -55,8 +55,7 @@ const updateFacultyValidationSchema = z.object({
 
 
 
-export const facultyValidation = {
-  createFacultyValidationSchema,
-  updateFacultyValidationSchema
-
+export const AdminValidation = {
+    createAdminValidationSchema,
+    updateAdminValidationSchema
 };

@@ -8,7 +8,6 @@ const getAllFaculties = catchAsync( async (req, res) => {
 
     const result = await FacultiesServices.getAllFacultiesDB()
 
-
     sendResponses(res, {
         statusCode: StatusCodes.OK, 
         success: true , 
@@ -29,9 +28,36 @@ const getSingleFaculties = catchAsync( async (req, res) => {
     })
 })
 
+const updateFaculties = catchAsync( async (req, res) => {
+    const {facultyId} = req.params
+    const payload = req.body
+    const result = await FacultiesServices.updateFacultiesDB(facultyId, payload)
+
+    sendResponses(res, {
+        statusCode: StatusCodes.OK, 
+        success: true , 
+        message: "update faculty successfully", 
+        data: result
+    })
+})
+
+const deleteFaculties = catchAsync( async (req, res) => {
+    const {facultyId} = req.params
+    const result = await FacultiesServices.deleteFacultiesDB(facultyId)
+
+    sendResponses(res, {
+        statusCode: StatusCodes.OK, 
+        success: true, 
+        message: "Delete faculty successfully", 
+        data: result
+    })
+})
+
 
 
 export const FacultyController = {
     getAllFaculties, 
-    getSingleFaculties
+    getSingleFaculties, 
+    updateFaculties,
+    deleteFaculties
 }

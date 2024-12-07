@@ -6,9 +6,11 @@ import { TStudent } from '../student/student.interface';
 import { Student } from '../student/student.model';
 import { TUser } from './user.interface';
 import { User } from './user.model';
-import generateStudentId from './user.utils';
 import { TFaculty } from '../faculty/faculty.interface';
 import { Faculty } from '../faculty/faculty.model';
+import generateStudentId, { generateAdminId, generateFacultyId } from './user.utils';
+import { TAdmin } from '../admin/admin.interface';
+import { Admin } from '../admin/admin.model';
 
 
 
@@ -61,15 +63,15 @@ const createStudentDB = async (password: string, payload: TStudent) => {
 
 
 
-///// create faculty
+///// create faculty///////////////////////////////
+
 const createFacultyDB = async (password: string, payload: TFaculty) => {
 
 
 const userFacultyObj: Record<string, unknown> = {}
 
-userFacultyObj.id = 'F-0001'
+userFacultyObj.id = await generateFacultyId("F") 
 userFacultyObj.role = 'faculty'
-
 userFacultyObj.password = envFile.default_password || password
 
 const userFaculty = await User.create(userFacultyObj)
@@ -87,7 +89,34 @@ return newFaculty
 
 
 
+///// create faculty/////////////////////////////////
+
+const createAdminDB = async (password: string, payload: TAdmin) => {
+
+
+const userAdminObj: Record<string, unknown> = {}
+
+userAdminObj.id = await generateAdminId('A')
+userAdminObj.role = 'admin'
+userAdminObj.password = envFile.default_password || password
+
+const userAdmin = await User.create(userAdminObj)
+
+if(userAdmin){
+  payload.id = userAdmin.id
+  payload.user = userAdmin._id
+}
+
+const newAdmin = await Admin.create(payload)
+
+return newAdmin
+}
+
+
+
+
 export const UserService = {
   createStudentDB,
-  createFacultyDB
+  createFacultyDB, 
+  createAdminDB
 };

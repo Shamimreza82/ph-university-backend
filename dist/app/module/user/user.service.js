@@ -1,4 +1,27 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -18,8 +41,9 @@ const config_1 = require("../../../config");
 const academicSemister_model_1 = require("../academicSemister/academicSemister.model");
 const student_model_1 = require("../student/student.model");
 const user_model_1 = require("./user.model");
-const user_utils_1 = __importDefault(require("./user.utils"));
 const faculty_model_1 = require("../faculty/faculty.model");
+const user_utils_1 = __importStar(require("./user.utils"));
+const admin_model_1 = require("../admin/admin.model");
 const createStudentDB = (password, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const session = yield mongoose_1.default.startSession();
     try {
@@ -53,10 +77,10 @@ const createStudentDB = (password, payload) => __awaiter(void 0, void 0, void 0,
         throw new Error(error);
     }
 });
-///// create faculty
+///// create faculty///////////////////////////////
 const createFacultyDB = (password, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const userFacultyObj = {};
-    userFacultyObj.id = 'F-0001';
+    userFacultyObj.id = yield (0, user_utils_1.generateFacultyId)("F");
     userFacultyObj.role = 'faculty';
     userFacultyObj.password = config_1.envFile.default_password || password;
     const userFaculty = yield user_model_1.User.create(userFacultyObj);
@@ -67,7 +91,22 @@ const createFacultyDB = (password, payload) => __awaiter(void 0, void 0, void 0,
     const newFaculty = yield faculty_model_1.Faculty.create(payload);
     return newFaculty;
 });
+///// create faculty/////////////////////////////////
+const createAdminDB = (password, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const userAdminObj = {};
+    userAdminObj.id = yield (0, user_utils_1.generateAdminId)('A');
+    userAdminObj.role = 'admin';
+    userAdminObj.password = config_1.envFile.default_password || password;
+    const userAdmin = yield user_model_1.User.create(userAdminObj);
+    if (userAdmin) {
+        payload.id = userAdmin.id;
+        payload.user = userAdmin._id;
+    }
+    const newAdmin = yield admin_model_1.Admin.create(payload);
+    return newAdmin;
+});
 exports.UserService = {
     createStudentDB,
-    createFacultyDB
+    createFacultyDB,
+    createAdminDB
 };

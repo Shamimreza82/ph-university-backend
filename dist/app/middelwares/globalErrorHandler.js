@@ -12,10 +12,10 @@ const handelZodError_1 = __importDefault(require("../errors/handelZodError"));
 const handelValidationError_1 = __importDefault(require("../errors/handelValidationError"));
 const handelCastError_1 = __importDefault(require("../errors/handelCastError"));
 const handelDublicateError_1 = __importDefault(require("../errors/handelDublicateError"));
+const AppError_1 = __importDefault(require("../errors/AppError"));
 const globalErrorHandler = (err, req, res, next) => {
-    console.log("dfdfdfdfdfdfdfdf", err.message);
     ////default Error 
-    let statusCode = err.statusCode || 500;
+    let statusCode = err.stat || 500;
     let message = err.message || 'Something went wrong';
     let errorSources = [
         {
@@ -48,27 +48,27 @@ const globalErrorHandler = (err, req, res, next) => {
         message = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.message;
         errorSources = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.errorSources;
     }
-    // else if (err instanceof AppError){
-    //   statusCode = err?.statusCode; 
-    //   message = err?.message
-    //   errorSources = [{
-    //     path: '', 
-    //     message: err?.message
-    //   }]
-    // }
-    // else if (err instanceof Error){
-    //   message = err?.message
-    //   errorSources = [{
-    //     path: '', 
-    //     message: err?.message
-    //   }]
-    // }
+    else if (err instanceof AppError_1.default) {
+        statusCode = err === null || err === void 0 ? void 0 : err.statusCode;
+        message = err === null || err === void 0 ? void 0 : err.message;
+        errorSources = [{
+                path: '',
+                message: err === null || err === void 0 ? void 0 : err.message
+            }];
+    }
+    else if (err instanceof Error) {
+        message = err === null || err === void 0 ? void 0 : err.message;
+        errorSources = [{
+                path: '',
+                message: err === null || err === void 0 ? void 0 : err.message
+            }];
+    }
     res.status(statusCode).json({
         success: false,
         message: message,
         errorSources,
         err,
-        stack: config_1.envFile.NODE_ENV === 'development' ? err === null || err === void 0 ? void 0 : err.stack : null,
+        stack: config_1.envFile.NODE_ENV === 'development' ? err === null || err === void 0 ? void 0 : err.stack : undefined,
     });
 };
 exports.default = globalErrorHandler;

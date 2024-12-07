@@ -36,7 +36,30 @@ const getSingleFaculties = (0, catchAsync_1.default)((req, res) => __awaiter(voi
         data: result
     });
 }));
+const updateFaculties = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { facultyId } = req.params;
+    const payload = req.body;
+    const result = yield faculty_service_1.FacultiesServices.updateFacultiesDB(facultyId, payload);
+    (0, sendRespons_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "update faculty successfully",
+        data: result
+    });
+}));
+const deleteFaculties = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { facultyId } = req.params;
+    const result = yield faculty_service_1.FacultiesServices.deleteFacultiesDB(facultyId);
+    (0, sendRespons_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "Delete faculty successfully",
+        data: result
+    });
+}));
 exports.FacultyController = {
     getAllFaculties,
-    getSingleFaculties
+    getSingleFaculties,
+    updateFaculties,
+    deleteFaculties
 };

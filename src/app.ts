@@ -1,5 +1,5 @@
 
-import express, { Request, Response } from 'express';
+import express from 'express';
 import globalErrorHandler from './app/middelwares/globalErrorHandler';
 import notFound from './app/middelwares/notFound';
 import router from './app/routes';
