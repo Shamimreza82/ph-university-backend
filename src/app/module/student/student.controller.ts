@@ -2,8 +2,6 @@ import { StudentService } from './student.service';
 import sendResponses from '../../utils/sendRespons';
 import { StatusCodes } from 'http-status-codes';
 import catchAsync from '../../utils/catchAsync';
-import { TStudent } from './student.interface';
-import { Student } from './student.model';
 
 const allStudents = catchAsync(async (req, res) => {
   console.log(req.query);

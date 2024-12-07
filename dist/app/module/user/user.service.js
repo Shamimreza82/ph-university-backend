@@ -19,6 +19,7 @@ const academicSemister_model_1 = require("../academicSemister/academicSemister.m
 const student_model_1 = require("../student/student.model");
 const user_model_1 = require("./user.model");
 const user_utils_1 = __importDefault(require("./user.utils"));
+const faculty_model_1 = require("../faculty/faculty.model");
 const createStudentDB = (password, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const session = yield mongoose_1.default.startSession();
     try {
@@ -52,6 +53,21 @@ const createStudentDB = (password, payload) => __awaiter(void 0, void 0, void 0,
         throw new Error(error);
     }
 });
+///// create faculty
+const createFacultyDB = (password, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const userFacultyObj = {};
+    userFacultyObj.id = 'F-0001';
+    userFacultyObj.role = 'faculty';
+    userFacultyObj.password = config_1.envFile.default_password || password;
+    const userFaculty = yield user_model_1.User.create(userFacultyObj);
+    if (userFaculty) {
+        payload.id = userFaculty.id;
+        payload.user = userFaculty._id;
+    }
+    const newFaculty = yield faculty_model_1.Faculty.create(payload);
+    return newFaculty;
+});
 exports.UserService = {
     createStudentDB,
+    createFacultyDB
 };

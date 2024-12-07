@@ -7,6 +7,9 @@ import { Student } from '../student/student.model';
 import { TUser } from './user.interface';
 import { User } from './user.model';
 import generateStudentId from './user.utils';
+import { TFaculty } from '../faculty/faculty.interface';
+import { Faculty } from '../faculty/faculty.model';
+
 
 
 const createStudentDB = async (password: string, payload: TStudent) => {
@@ -56,6 +59,35 @@ const createStudentDB = async (password: string, payload: TStudent) => {
   }
 };
 
+
+
+///// create faculty
+const createFacultyDB = async (password: string, payload: TFaculty) => {
+
+
+const userFacultyObj: Record<string, unknown> = {}
+
+userFacultyObj.id = 'F-0001'
+userFacultyObj.role = 'faculty'
+
+userFacultyObj.password = envFile.default_password || password
+
+const userFaculty = await User.create(userFacultyObj)
+
+if(userFaculty){
+  payload.id = userFaculty.id
+  payload.user = userFaculty._id
+}
+
+const newFaculty = await Faculty.create(payload)
+
+return newFaculty
+}
+
+
+
+
 export const UserService = {
   createStudentDB,
+  createFacultyDB
 };

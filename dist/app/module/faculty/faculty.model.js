@@ -3,15 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Faculty = void 0;
 const mongoose_1 = require("mongoose");
 const userNameSchema = new mongoose_1.Schema({
-    firstName: { types: String, required: true },
-    middleName: { types: String, required: true },
-    lastName: { types: String, required: true },
+    firstName: { type: String, required: true },
+    middleName: { type: String, required: true },
+    lastName: { type: String, required: true },
 });
 const facultySchema = new mongoose_1.Schema({
     id: { type: String, required: true },
-    user: { type: mongoose_1.Schema.Types.ObjectId, required: true },
+    user: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User', required: true },
     name: { type: userNameSchema, required: true },
-    designation: { types: String, required: true },
+    designation: { type: String, required: true },
     gender: {
         type: String,
         enum: ['male', 'female', 'other'],
@@ -24,7 +24,7 @@ const facultySchema = new mongoose_1.Schema({
     presentAddress: { type: String, required: true },
     permanentAddress: { type: String, required: true },
     profileImage: { type: String, required: true },
-    academicDepartment: { type: mongoose_1.Schema.Types.ObjectId },
-    isDeleted: { type: Boolean, default: false }
+    academicDepartment: { type: mongoose_1.Schema.Types.ObjectId, ref: 'Department' },
+    isDeleted: { type: Boolean, default: false },
 }, { timestamps: true });
-exports.Faculty = (0, mongoose_1.model)("Faculty", facultySchema);
+exports.Faculty = (0, mongoose_1.model)('Faculty', facultySchema);
