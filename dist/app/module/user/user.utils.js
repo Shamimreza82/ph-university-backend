@@ -58,8 +58,10 @@ const findFacultyLastId = () => __awaiter(void 0, void 0, void 0, function* () {
     return (lastStudent === null || lastStudent === void 0 ? void 0 : lastStudent.id) ? lastStudent === null || lastStudent === void 0 ? void 0 : lastStudent.id : undefined;
 });
 const generateFacultyId = (Prefix) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = yield findFacultyLastId();
-    console.log(id);
+    let id = yield findFacultyLastId();
+    if (id === undefined) {
+        id = "F-0000";
+    }
     const formateId = Number(id.split('-')[1]);
     const number = (Number(formateId) + 1).toString().padStart(4, '0') || '0001';
     const newNumber = number || '0001';

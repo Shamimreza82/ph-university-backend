@@ -46,7 +46,7 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     statusCode = simplifiedError?.statusCode; 
     message = simplifiedError?.message
     errorSources = simplifiedError?.errorSources
-  }else if (err.errorResponse.code === 11000){
+  }else if (err?.errorResponse?.code === 11000){
     const simplifiedError = handelDuplicateError(err);
     statusCode = simplifiedError?.statusCode; 
     message = simplifiedError?.message
@@ -78,7 +78,6 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     success: false,
     message: message,
     errorSources,
-    err,
     stack: envFile.NODE_ENV === 'development' ?  err?.stack : undefined,
    
   });

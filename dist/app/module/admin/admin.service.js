@@ -16,8 +16,10 @@ exports.AdminServices = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const admin_model_1 = require("./admin.model");
 const user_model_1 = require("../user/user.model");
-const getAllAdminDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = admin_model_1.Admin.find();
+const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
+const getAllAdminDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const adminQuery = new QueryBuilder_1.default(admin_model_1.Admin.find(), query);
+    const result = yield adminQuery.modelQuery;
     return result;
 });
 const getSingleAdminDB = (id) => __awaiter(void 0, void 0, void 0, function* () {

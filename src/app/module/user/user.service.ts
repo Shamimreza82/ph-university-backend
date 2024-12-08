@@ -15,9 +15,6 @@ import generateStudentId, {
 import { TAdmin } from '../admin/admin.interface';
 import { Admin } from '../admin/admin.model';
 
-
-
-
 const createStudentDB = async (password: string, payload: TStudent) => {
   const session = await mongoose.startSession();
   try {
@@ -69,30 +66,39 @@ const createStudentDB = async (password: string, payload: TStudent) => {
 
 const createFacultyDB = async (password: string, payload: TFaculty) => {
   const userFacultyObj: Record<string, unknown> = {};
+  const session = await mongoose.startSession();
+  try {
+    await session.startTransaction();
+    userFacultyObj.id = await generateFacultyId('F');
+    userFacultyObj.role = 'faculty';
+    userFacultyObj.password = envFile.default_password || password;
 
-  userFacultyObj.id = await generateFacultyId('F');
-  userFacultyObj.role = 'faculty';
-  userFacultyObj.password = envFile.default_password || password;
+    const userFaculty = await User.create([userFacultyObj], {session});
 
-  const userFaculty = await User.create(userFacultyObj);
+    if (userFaculty) {
+      payload.id = userFaculty[0].id;
+      payload.user = userFaculty[0]._id;
+    }
 
-  if (userFaculty) {
-    payload.id = userFaculty.id;
-    payload.user = userFaculty._id;
+    const newFaculty = await Faculty.create(payload);
+    await session.commitTransaction();
+    await session.endSession();
+    return newFaculty
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new Error(error);
   }
-
-  const newFaculty = await Faculty.create(payload);
-
-  return newFaculty;
 };
 
 ///// create faculty/////////////////////////////////
 
 const createAdminDB = async (password: string, payload: TAdmin) => {
-
-  const session = await mongoose.startSession()
+  const session = await mongoose.startSession();
   try {
-    await session.startTransaction()
+    await session.startTransaction();
 
     const userAdminObj: Record<string, unknown> = {};
 
@@ -100,23 +106,23 @@ const createAdminDB = async (password: string, payload: TAdmin) => {
     userAdminObj.role = 'admin';
     userAdminObj.password = envFile.default_password || password;
 
-    const userAdmin = await User.create([userAdminObj], {session});
+    const userAdmin = await User.create([userAdminObj], { session });
 
     if (userAdmin) {
       payload.id = userAdmin[0].id;
       payload.user = userAdmin[0]._id;
     }
 
-    const newAdmin = await Admin.create([payload], {session});
+    const newAdmin = await Admin.create([payload], { session });
 
-    await session.commitTransaction()
-    await session.endSession()
+    await session.commitTransaction();
+    await session.endSession();
     return newAdmin[0];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
-    await session.abortTransaction()
-    await session.endSession()
-    throw new Error(error)
+    await session.abortTransaction();
+    await session.endSession();
+    throw new Error(error);
   }
 };
 

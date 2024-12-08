@@ -67,11 +67,11 @@ export default generateStudentId;
   };
 
 
-
-
 export const generateFacultyId = async (Prefix: string) => {
-  const {id} = await findFacultyLastId()
-  console.log(id);
+  let id = await findFacultyLastId()
+  if(id === undefined){
+    id = "F-0000"
+  }
   const formateId = Number((id as string).split('-')[1])
   const number = (Number(formateId)+ 1).toString().padStart(4, '0') || '0001'
   const newNumber = number || '0001'

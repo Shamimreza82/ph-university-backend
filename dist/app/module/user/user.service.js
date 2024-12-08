@@ -80,16 +80,28 @@ const createStudentDB = (password, payload) => __awaiter(void 0, void 0, void 0,
 ///// create faculty///////////////////////////////
 const createFacultyDB = (password, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const userFacultyObj = {};
-    userFacultyObj.id = yield (0, user_utils_1.generateFacultyId)('F');
-    userFacultyObj.role = 'faculty';
-    userFacultyObj.password = config_1.envFile.default_password || password;
-    const userFaculty = yield user_model_1.User.create(userFacultyObj);
-    if (userFaculty) {
-        payload.id = userFaculty.id;
-        payload.user = userFaculty._id;
+    const session = yield mongoose_1.default.startSession();
+    try {
+        yield session.startTransaction();
+        userFacultyObj.id = yield (0, user_utils_1.generateFacultyId)('F');
+        userFacultyObj.role = 'faculty';
+        userFacultyObj.password = config_1.envFile.default_password || password;
+        const userFaculty = yield user_model_1.User.create([userFacultyObj], { session });
+        if (userFaculty) {
+            payload.id = userFaculty[0].id;
+            payload.user = userFaculty[0]._id;
+        }
+        const newFaculty = yield faculty_model_1.Faculty.create(payload);
+        yield session.commitTransaction();
+        yield session.endSession();
+        return newFaculty;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     }
-    const newFaculty = yield faculty_model_1.Faculty.create(payload);
-    return newFaculty;
+    catch (error) {
+        yield session.abortTransaction();
+        yield session.endSession();
+        throw new Error(error);
+    }
 });
 ///// create faculty/////////////////////////////////
 const createAdminDB = (password, payload) => __awaiter(void 0, void 0, void 0, function* () {

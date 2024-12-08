@@ -14,6 +14,7 @@ const handelCastError_1 = __importDefault(require("../errors/handelCastError"));
 const handelDublicateError_1 = __importDefault(require("../errors/handelDublicateError"));
 const AppError_1 = __importDefault(require("../errors/AppError"));
 const globalErrorHandler = (err, req, res, next) => {
+    var _a;
     ////default Error 
     let statusCode = err.stat || 500;
     let message = err.message || 'Something went wrong';
@@ -42,7 +43,7 @@ const globalErrorHandler = (err, req, res, next) => {
         message = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.message;
         errorSources = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.errorSources;
     }
-    else if (err.errorResponse.code === 11000) {
+    else if (((_a = err === null || err === void 0 ? void 0 : err.errorResponse) === null || _a === void 0 ? void 0 : _a.code) === 11000) {
         const simplifiedError = (0, handelDublicateError_1.default)(err);
         statusCode = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.statusCode;
         message = simplifiedError === null || simplifiedError === void 0 ? void 0 : simplifiedError.message;
@@ -67,7 +68,6 @@ const globalErrorHandler = (err, req, res, next) => {
         success: false,
         message: message,
         errorSources,
-        err,
         stack: config_1.envFile.NODE_ENV === 'development' ? err === null || err === void 0 ? void 0 : err.stack : undefined,
     });
 };

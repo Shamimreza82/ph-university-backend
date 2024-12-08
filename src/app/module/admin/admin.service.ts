@@ -2,9 +2,12 @@ import mongoose from "mongoose";
 import { TAdmin } from "./admin.interface";
 import { Admin } from "./admin.model";
 import { User } from "../user/user.model";
+import QueryBuilder from "../../builder/QueryBuilder";
 
-const getAllAdminDB = async () => {
-  const result = Admin.find();
+const getAllAdminDB = async (query: Record<string, unknown>) => {
+
+  const adminQuery = new QueryBuilder(Admin.find(), query)
+  const result = await adminQuery.modelQuery
   return result;
 };
 

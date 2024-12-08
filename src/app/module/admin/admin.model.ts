@@ -1,6 +1,10 @@
 import { model, Schema } from 'mongoose';
 import { TAdmin } from './admin.interface';
 
+
+
+
+
 const userNameSchema = new Schema({
   firstName: { type: String, required: true },
   middleName: { type: String, required: true },

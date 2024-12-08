@@ -1,6 +1,17 @@
 import { Types } from "mongoose";
 import { TUserName } from "../student/student.interface";
 
+export type TGender = 'male' | 'female' | 'other';
+export type TBloodGroup =
+  | 'A+'
+  | 'A-'
+  | 'B+'
+  | 'B-'
+  | 'AB+'
+  | 'AB-'
+  | 'O+'
+  | 'O-';
+
 
 
 export type TAdmin = {
@@ -8,7 +19,7 @@ export type TAdmin = {
     user: Types.ObjectId; 
     designation: string; 
     name: TUserName; 
-    gender: 'male' | 'female' | 'other';
+    gender: TGender;
     dateOfBirth?: Date; 
     email: string; 
     contactNo: string; 
