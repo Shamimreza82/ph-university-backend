@@ -13,10 +13,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
-const validateRequest = (schema) => {
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const config_1 = require("../../config");
+const auth = (...requiredRoles) => {
     return (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-        yield schema.parseAsync({ body: req.body });
-        next();
+        const token = req.headers.authorization;
+        if (!token) {
+            throw new Error('you are not authorized');
+        }
+        if (token) {
+            jsonwebtoken_1.default.verify(token, config_1.envFile.jwt_access_secret, function (err, decoded) {
+                if (err) {
+                    throw new Error('you are not authorized');
+                }
+                const role = decoded.role;
+                if (requiredRoles && !requiredRoles.includes(role)) {
+                    throw new Error('you are not authorized role ');
+                }
+                req.user = decoded;
+                next();
+            });
+        }
     }));
 };
-exports.default = validateRequest;
+exports.default = auth;

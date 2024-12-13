@@ -1,7 +1,6 @@
 import jwt from "jsonwebtoken";
 import { User } from "../user/user.model";
 import { TLoginUser } from "./auth.interface";
-import bcrypt from 'bcrypt'
 import { envFile } from "../../../config";
 
 const loginUser = async (payload: TLoginUser) => {

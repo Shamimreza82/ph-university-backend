@@ -5,7 +5,6 @@ import { FacultiesServices } from "./faculty.service";
 
 
 const getAllFaculties = catchAsync( async (req, res) => {
-
     const result = await FacultiesServices.getAllFacultiesDB()
 
     sendResponses(res, {

@@ -70,10 +70,6 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   }
 
  
-
-
-
-
   res.status(statusCode).json({
     success: false,
     message: message,
