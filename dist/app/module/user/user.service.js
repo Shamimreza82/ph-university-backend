@@ -109,7 +109,7 @@ const createAdminDB = (password, payload) => __awaiter(void 0, void 0, void 0, f
     try {
         yield session.startTransaction();
         const userAdminObj = {};
-        userAdminObj.id = yield (0, user_utils_1.generateAdminId)('A');
+        userAdminObj.id = 'A-0001';
         userAdminObj.role = 'admin';
         userAdminObj.password = config_1.envFile.default_password || password;
         const userAdmin = yield user_model_1.User.create([userAdminObj], { session });

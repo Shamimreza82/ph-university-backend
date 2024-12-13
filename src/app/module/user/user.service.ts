@@ -102,7 +102,7 @@ const createAdminDB = async (password: string, payload: TAdmin) => {
 
     const userAdminObj: Record<string, unknown> = {};
 
-    userAdminObj.id = await generateAdminId('A');
+    userAdminObj.id = 'A-0001'
     userAdminObj.role = 'admin';
     userAdminObj.password = envFile.default_password || password;
 

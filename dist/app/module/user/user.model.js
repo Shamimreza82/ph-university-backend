@@ -45,7 +45,17 @@ userSchema.pre('save', function (next) {
     });
 });
 // userSchema.post('findOne', function(doc, next){
-//   doc.password = ''; 
+//   doc.password = '';
 //   next()
 // })
+userSchema.statics.isUserExistByCustomId = function (id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield exports.User.findOne({ id });
+    });
+};
+userSchema.statics.isPasswordMatch = function (plaintextPassword, hashPassword) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield bcrypt_1.default.compare(plaintextPassword, hashPassword);
+    });
+};
 exports.User = (0, mongoose_1.model)('User', userSchema);

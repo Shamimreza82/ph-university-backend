@@ -8,6 +8,8 @@ import { FacultyRoute } from '../module/faculty/faculty.route'
 import { AdminRoute } from '../module/admin/admin.route'
 import { CourseRoutes } from '../module/course/course.route'
 import { SemesterRegistrationRouter } from '../module/semesterRegistration/semesterRegistration.route'
+import { OfferedCourseRouter } from '../module/offeredCourse/offeredCourse.route'
+import { AuthRouter } from '../module/Auth/auth.route'
 
 
 
@@ -50,6 +52,14 @@ const moduleRoutes = [
     {
         path: '/semester-registration', 
         route: SemesterRegistrationRouter
+    }, 
+    {
+        path: '/offered-course', 
+        route: OfferedCourseRouter
+    }, 
+    {
+        path: '/auth', 
+        route: AuthRouter
     }, 
 
 ]

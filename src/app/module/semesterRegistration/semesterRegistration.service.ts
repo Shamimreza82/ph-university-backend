@@ -1,5 +1,6 @@
 import QueryBuilder from '../../builder/QueryBuilder';
 import { AcademicSemester } from '../academicSemister/academicSemister.model';
+import { RegistrationStatus } from './semesterRegistration.conostance';
 import { TSemesterRegistration } from './semesterRegistration.interface';
 import { SemesterRegistration } from './semesterRegistration.model';
 
@@ -7,7 +8,7 @@ const createSemesterRegistrationDB = async (payload: TSemesterRegistration) => {
   const academicSemester = payload?.academicSemester;
 
   const isThereAnyUpcomingOrOngoingSemester = await SemesterRegistration.findOne({
-    $or: [{status: "UPCOMING"}, {status: "ONGOING"}]
+    $or: [{status: RegistrationStatus.UPCOMING}, {status: RegistrationStatus.ONGOING}]
   })
   if(isThereAnyUpcomingOrOngoingSemester){
     throw new Error(`There is already an ${isThereAnyUpcomingOrOngoingSemester.status} register semester`);
@@ -59,13 +60,27 @@ const updateSemesterRegistrationDB = async (
   id: string,
   payload: Partial<TSemesterRegistration>,
 ) => {
-  //// c
+  const isSemesterRegistrationExist = await SemesterRegistration.findById(id);
+  if (!isSemesterRegistrationExist) {
+    throw new Error('This  Semester is not found');
+  }
+
 
   ////if the requited semester registration is ended will not update anything
-console.log(id);
-const requestedSemester = await SemesterRegistration.findById(id)
-if(requestedSemester?.status === "ENDED"){
-  throw new Error(`This Semester is already ${requestedSemester?.status}`);
+const currentSemesterStatus = isSemesterRegistrationExist?.status 
+const requestedStatus = payload?.status
+if(currentSemesterStatus === RegistrationStatus.ENDED){
+  throw new Error(`This Semester is already ${currentSemesterStatus}`);
+}
+
+
+/// UPCOMING >> ONGOING >> ENDED
+if(currentSemesterStatus === RegistrationStatus.UPCOMING && requestedStatus === RegistrationStatus.ENDED ){
+  throw new Error(`you can not change ${currentSemesterStatus} to ${requestedStatus}`);
+}
+
+if(currentSemesterStatus === RegistrationStatus.UPCOMING && requestedStatus === RegistrationStatus.ONGOING){
+  throw new Error(`you can not change ${currentSemesterStatus} to ${requestedStatus}`);
 }
 
 

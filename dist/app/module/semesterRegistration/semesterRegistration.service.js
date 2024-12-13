@@ -15,11 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SemesterRegistrationService = void 0;
 const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
 const academicSemister_model_1 = require("../academicSemister/academicSemister.model");
+const semesterRegistration_conostance_1 = require("./semesterRegistration.conostance");
 const semesterRegistration_model_1 = require("./semesterRegistration.model");
 const createSemesterRegistrationDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const academicSemester = payload === null || payload === void 0 ? void 0 : payload.academicSemester;
     const isThereAnyUpcomingOrOngoingSemester = yield semesterRegistration_model_1.SemesterRegistration.findOne({
-        $or: [{ status: "UPCOMING" }, { status: "ONGOING" }]
+        $or: [{ status: semesterRegistration_conostance_1.RegistrationStatus.UPCOMING }, { status: semesterRegistration_conostance_1.RegistrationStatus.ONGOING }]
     });
     if (isThereAnyUpcomingOrOngoingSemester) {
         throw new Error(`There is already an ${isThereAnyUpcomingOrOngoingSemester.status} register semester`);
@@ -51,12 +52,22 @@ const getSingleSemesterRegistrationDB = (id) => __awaiter(void 0, void 0, void 0
     return result;
 });
 const updateSemesterRegistrationDB = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    //// c
+    const isSemesterRegistrationExist = yield semesterRegistration_model_1.SemesterRegistration.findById(id);
+    if (!isSemesterRegistrationExist) {
+        throw new Error('This  Semester is not found');
+    }
     ////if the requited semester registration is ended will not update anything
-    console.log(id);
-    const requestedSemester = yield semesterRegistration_model_1.SemesterRegistration.findById(id);
-    if ((requestedSemester === null || requestedSemester === void 0 ? void 0 : requestedSemester.status) === "ENDED") {
-        throw new Error(`This Semester is already ${requestedSemester === null || requestedSemester === void 0 ? void 0 : requestedSemester.status}`);
+    const currentSemesterStatus = isSemesterRegistrationExist === null || isSemesterRegistrationExist === void 0 ? void 0 : isSemesterRegistrationExist.status;
+    const requestedStatus = payload === null || payload === void 0 ? void 0 : payload.status;
+    if (currentSemesterStatus === semesterRegistration_conostance_1.RegistrationStatus.ENDED) {
+        throw new Error(`This Semester is already ${currentSemesterStatus}`);
+    }
+    /// UPCOMING >> ONGOING >> ENDED
+    if (currentSemesterStatus === semesterRegistration_conostance_1.RegistrationStatus.UPCOMING && requestedStatus === semesterRegistration_conostance_1.RegistrationStatus.ENDED) {
+        throw new Error(`you can not change ${currentSemesterStatus} to ${requestedStatus}`);
+    }
+    if (currentSemesterStatus === semesterRegistration_conostance_1.RegistrationStatus.UPCOMING && requestedStatus === semesterRegistration_conostance_1.RegistrationStatus.ONGOING) {
+        throw new Error(`you can not change ${currentSemesterStatus} to ${requestedStatus}`);
     }
     const result = yield semesterRegistration_model_1.SemesterRegistration.findByIdAndUpdate({ _id: id }, { $set: payload }, { new: true });
     return result;

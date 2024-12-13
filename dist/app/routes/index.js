@@ -13,6 +13,8 @@ const faculty_route_1 = require("../module/faculty/faculty.route");
 const admin_route_1 = require("../module/admin/admin.route");
 const course_route_1 = require("../module/course/course.route");
 const semesterRegistration_route_1 = require("../module/semesterRegistration/semesterRegistration.route");
+const offeredCourse_route_1 = require("../module/offeredCourse/offeredCourse.route");
+const auth_route_1 = require("../module/Auth/auth.route");
 const router = express_1.default.Router();
 const moduleRoutes = [
     {
@@ -50,6 +52,14 @@ const moduleRoutes = [
     {
         path: '/semester-registration',
         route: semesterRegistration_route_1.SemesterRegistrationRouter
+    },
+    {
+        path: '/offered-course',
+        route: offeredCourse_route_1.OfferedCourseRouter
+    },
+    {
+        path: '/auth',
+        route: auth_route_1.AuthRouter
     },
 ];
 moduleRoutes.forEach(route => router.use(route.path, route.route));
