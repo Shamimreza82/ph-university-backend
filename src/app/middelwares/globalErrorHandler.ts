@@ -17,7 +17,7 @@ import AppError from '../errors/AppError';
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   ////default Error 
-  let statusCode = err.stat || 500;
+  let statusCode = err.status || 500;
   let message = err.message || 'Something went wrong';
   let errorSources: TErrorSource = [
     {
@@ -25,7 +25,6 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
       message: 'Something went wrong',
     },
   ];
-
 
 
 

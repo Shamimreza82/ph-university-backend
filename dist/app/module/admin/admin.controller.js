@@ -18,7 +18,7 @@ const catchAsync_1 = __importDefault(require("../../utils/catchAsync"));
 const sendRespons_1 = __importDefault(require("../../utils/sendRespons"));
 const admin_service_1 = require("./admin.service");
 const getAllAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield admin_service_1.AdminServices.getAllAdminDB();
+    const result = yield admin_service_1.AdminServices.getAllAdminDB(req.query);
     (0, sendRespons_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,

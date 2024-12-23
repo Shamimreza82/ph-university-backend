@@ -14,7 +14,7 @@ const AppError_1 = __importDefault(require("../errors/AppError"));
 const globalErrorHandler = (err, req, res, next) => {
     var _a;
     ////default Error 
-    let statusCode = err.stat || 500;
+    let statusCode = err.status || 500;
     let message = err.message || 'Something went wrong';
     let errorSources = [
         {

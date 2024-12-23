@@ -14,6 +14,6 @@ const auth_1 = __importDefault(require("../../middelwares/auth"));
 const user_conostant_1 = require("./user.conostant");
 const router = express_1.default.Router();
 router.post('/create-student', (0, auth_1.default)(user_conostant_1.USER_ROLE.admin), (0, validateRequest_1.default)(student_validation_1.studentValidations.createStudentValidationSchema), user_controller_1.UserController.createStudent);
-router.post('/create-faculty', (0, auth_1.default)(user_conostant_1.USER_ROLE.admin), (0, validateRequest_1.default)(faculty_validation_1.facultyValidation.createFacultyValidationSchema), user_controller_1.UserController.createFaculty);
+router.post('/create-faculty', (0, validateRequest_1.default)(faculty_validation_1.facultyValidation.createFacultyValidationSchema), user_controller_1.UserController.createFaculty);
 router.post('/create-admin', (0, validateRequest_1.default)(admin_validation_1.AdminValidation.createAdminValidationSchema), user_controller_1.UserController.createAdmin);
 exports.UserRouter = router;

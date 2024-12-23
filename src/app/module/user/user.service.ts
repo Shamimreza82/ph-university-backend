@@ -30,6 +30,7 @@ const createStudentDB = async (password: string, payload: TStudent) => {
     );
 
     userData.role = 'student';
+    userData.email = payload?.email
 
     userData.id = await generateStudentId(
       admissionSemester as TAcademicSemester,
@@ -71,6 +72,7 @@ const createFacultyDB = async (password: string, payload: TFaculty) => {
     await session.startTransaction();
     userFacultyObj.id = await generateFacultyId('F');
     userFacultyObj.role = 'faculty';
+    userFacultyObj.email = payload?.email
     userFacultyObj.password = envFile.default_password || password;
 
     const userFaculty = await User.create([userFacultyObj], {session});
@@ -104,6 +106,7 @@ const createAdminDB = async (password: string, payload: TAdmin) => {
 
     userAdminObj.id = 'A-0001'
     userAdminObj.role = 'admin';
+    userAdminObj.email = payload?.email
     userAdminObj.password = envFile.default_password || password;
 
     const userAdmin = await User.create([userAdminObj], { session });

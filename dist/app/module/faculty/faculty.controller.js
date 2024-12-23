@@ -19,6 +19,7 @@ const sendRespons_1 = __importDefault(require("../../utils/sendRespons"));
 const faculty_service_1 = require("./faculty.service");
 const getAllFaculties = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield faculty_service_1.FacultiesServices.getAllFacultiesDB();
+    console.log(req.cookies);
     (0, sendRespons_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,

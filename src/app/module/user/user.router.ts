@@ -16,7 +16,7 @@ router.post(
   '/create-student', auth(USER_ROLE.admin),validateRequest(studentValidations.createStudentValidationSchema), UserController.createStudent,
 );
 
-router.post('/create-faculty',auth(USER_ROLE.admin), validateRequest(facultyValidation.createFacultyValidationSchema), UserController.createFaculty )
+router.post('/create-faculty', validateRequest(facultyValidation.createFacultyValidationSchema), UserController.createFaculty )
 
 router.post('/create-admin', validateRequest(AdminValidation.createAdminValidationSchema),UserController.createAdmin )
 export const UserRouter = router;

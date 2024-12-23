@@ -10,4 +10,8 @@ export const envFile = {
   default_password: process.env.DEFAULT_PASS,
   salt_round_pass: process.env.SALT_ROUND_PASS, 
   jwt_access_secret: process.env.JWT_ACCESS_SECRET, 
+  jwt_refrishAccess_secret: process.env.JWT_REFRISHACCESS_SECRET, 
+  JWT_ACCESS_EXPIRE_IN: process.env.JWT_ACCESS_EXPIRE_IN, 
+  JWT_REFRESH_EXPIRE_IN: process.env.JWT_REFRESH_EXPIRE_IN, 
+  reset_pass_Ui_link: process.env.RESET_PASSWORD_UI_LINK
 };

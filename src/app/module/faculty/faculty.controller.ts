@@ -6,7 +6,9 @@ import { FacultiesServices } from "./faculty.service";
 
 const getAllFaculties = catchAsync( async (req, res) => {
     const result = await FacultiesServices.getAllFacultiesDB()
+    console.log(req.cookies);
 
+    
     sendResponses(res, {
         statusCode: StatusCodes.OK, 
         success: true , 

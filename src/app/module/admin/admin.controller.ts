@@ -5,7 +5,7 @@ import { AdminServices } from "./admin.service"
 
 const getAllAdmin = catchAsync( async (req, res) => {
 
-    const result = await AdminServices.getAllAdminDB()
+    const result = await AdminServices.getAllAdminDB(req.query)
 
     sendResponses(res, {
         statusCode: StatusCodes.OK, 

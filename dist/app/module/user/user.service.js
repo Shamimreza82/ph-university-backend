@@ -54,6 +54,7 @@ const createStudentDB = (password, payload) => __awaiter(void 0, void 0, void 0,
         //find academic semester info
         const admissionSemester = yield academicSemister_model_1.AcademicSemester.findById(payload.admissionSemester);
         userData.role = 'student';
+        userData.email = payload === null || payload === void 0 ? void 0 : payload.email;
         userData.id = yield (0, user_utils_1.default)(admissionSemester);
         const newUser = yield user_model_1.User.create([userData], { session });
         //create a student if user created
@@ -85,6 +86,7 @@ const createFacultyDB = (password, payload) => __awaiter(void 0, void 0, void 0,
         yield session.startTransaction();
         userFacultyObj.id = yield (0, user_utils_1.generateFacultyId)('F');
         userFacultyObj.role = 'faculty';
+        userFacultyObj.email = payload === null || payload === void 0 ? void 0 : payload.email;
         userFacultyObj.password = config_1.envFile.default_password || password;
         const userFaculty = yield user_model_1.User.create([userFacultyObj], { session });
         if (userFaculty) {
@@ -111,6 +113,7 @@ const createAdminDB = (password, payload) => __awaiter(void 0, void 0, void 0, f
         const userAdminObj = {};
         userAdminObj.id = 'A-0001';
         userAdminObj.role = 'admin';
+        userAdminObj.email = payload === null || payload === void 0 ? void 0 : payload.email;
         userAdminObj.password = config_1.envFile.default_password || password;
         const userAdmin = yield user_model_1.User.create([userAdminObj], { session });
         if (userAdmin) {
