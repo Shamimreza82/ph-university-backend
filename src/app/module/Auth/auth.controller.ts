@@ -43,7 +43,21 @@ const forgetPassword = catchAsync(async (req, res) => {
   sendResponses(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: 'reaset link is genarated',
+    message: 'forget password link is genarated',
+    data: result,
+  });
+});
+
+const resetPassword = catchAsync(async (req, res) => {
+
+  const token = req.headers.authorization
+
+  const result = await AuthServices.resetPassword(req.body, token as string);
+
+  sendResponses(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Password reset successfully',
     data: result,
   });
 });
@@ -51,5 +65,6 @@ const forgetPassword = catchAsync(async (req, res) => {
 export const AuthController = {
   loginUser,
   changePassword,
-  forgetPassword
+  forgetPassword, 
+  resetPassword
 };

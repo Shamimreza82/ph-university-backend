@@ -20,6 +20,7 @@ route.post(
 );
 
 route.post('/forget-password', validateRequest(AuthValidation.forgetPasswordValidationSchema), AuthController.forgetPassword)
+route.post('/reset-password', validateRequest(AuthValidation.forgetPasswordValidationSchema), AuthController.resetPassword)
 
 //TODO need word refresh toke hare 
 

@@ -1,4 +1,5 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
+import { envFile } from '../../../config';
 
  const createToken = (
   jwtPayload: { userId: string; role: string },
@@ -9,3 +10,7 @@ import jwt from 'jsonwebtoken';
 };
 
 export default createToken
+
+export const verifyToken = (token: string, secret: string) => {
+    return jwt.verify(token, secret) as JwtPayload
+}

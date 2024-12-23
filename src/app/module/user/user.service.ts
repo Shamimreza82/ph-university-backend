@@ -9,11 +9,11 @@ import { User } from './user.model';
 import { TFaculty } from '../faculty/faculty.interface';
 import { Faculty } from '../faculty/faculty.model';
 import generateStudentId, {
-  generateAdminId,
   generateFacultyId,
 } from './user.utils';
 import { TAdmin } from '../admin/admin.interface';
 import { Admin } from '../admin/admin.model';
+import { verifyToken } from '../Auth/auth.ults';
 
 const createStudentDB = async (password: string, payload: TStudent) => {
   const session = await mongoose.startSession();
@@ -129,8 +129,30 @@ const createAdminDB = async (password: string, payload: TAdmin) => {
   }
 };
 
+const getMe = async (token: string) => {
+
+const decoded = verifyToken(token, envFile.jwt_access_secret as string)
+
+  const {userId, role} = decoded
+  console.log(userId, role);
+
+  let result = null
+  if(role === 'student'){
+    result = await Student.findOne({id: userId})
+  } 
+
+  if(role === 'admin'){
+    result = await Admin.findOne({id: userId})
+  } 
+
+  if(role === 'faculty'){
+    result = await Faculty.findOne({id: userId})
+  } 
+return result
+}
 export const UserService = {
   createStudentDB,
   createFacultyDB,
   createAdminDB,
+  getMe
 };

@@ -2,6 +2,8 @@ import { UserService } from './user.service';
 import sendResponses from '../../utils/sendRespons';
 import statuscode from 'http-status-codes';
 import catchAsync from '../../utils/catchAsync';
+import { verifyToken } from '../Auth/auth.ults';
+import { envFile } from '../../../config';
 
 
 
@@ -50,11 +52,33 @@ const createAdmin = catchAsync(async (req, res) => {
 });
 
 
+const getMe = catchAsync(async (req, res) => {
+ const token = req.headers.authorization 
+
+ if(!token){
+  throw new Error("token not found")
+ }
+
+
+
+ 
+  const result = await UserService.getMe(token);
+
+  sendResponses(res, {
+    statusCode: statuscode.OK,
+    success: true,
+    message: 'data retrieve successfully',
+    data: result,
+  });
+});
+
+
 
 
 
 export const UserController = {
   createStudent,
   createFaculty, 
-  createAdmin
+  createAdmin, 
+  getMe, 
 };
