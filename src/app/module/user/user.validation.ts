@@ -1,4 +1,5 @@
 import z from 'zod';
+import { userStatus } from './user.conostant';
 
 const userSchemaValidation = z.object({
   password: z
@@ -11,4 +12,13 @@ const userSchemaValidation = z.object({
     ),
 });
 
-export default userSchemaValidation;
+const statusValidationSchema = z.object({
+  body: z.object({
+    status: z.enum([...userStatus] as [string, ...string[]])
+  })
+});
+
+export const UserValidation = {
+  userSchemaValidation, 
+  statusValidationSchema
+}

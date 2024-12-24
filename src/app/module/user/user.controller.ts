@@ -11,15 +11,16 @@ import { envFile } from '../../../config';
 
 
 const createStudent = catchAsync(async (req, res) => {
+
   const { password, student: studentData } = req.body;
  
-  const result = await UserService.createStudentDB(password, studentData);
+  const result = await UserService.createStudentDB(password, studentData, req.file);
 
   sendResponses(res, {
     statusCode: statuscode.OK,
     success: true,
     message: 'Student create successfully',
-    data: result,
+    data: result
   });
 });
 
@@ -52,17 +53,27 @@ const createAdmin = catchAsync(async (req, res) => {
 });
 
 
+const changeStatus = catchAsync(async (req, res) => {
+
+  const id = req.params.id
+
+  const result = await UserService.changeStatus(id, req.body);
+
+  sendResponses(res, {
+    statusCode: statuscode.OK,
+    success: true,
+    message: 'user status change successfully',
+    data: result,
+  });
+});
+
+
+
+
 const getMe = catchAsync(async (req, res) => {
- const token = req.headers.authorization 
-
- if(!token){
-  throw new Error("token not found")
- }
 
 
-
- 
-  const result = await UserService.getMe(token);
+  const result = await UserService.getMe(req.user);
 
   sendResponses(res, {
     statusCode: statuscode.OK,
@@ -79,6 +90,7 @@ const getMe = catchAsync(async (req, res) => {
 export const UserController = {
   createStudent,
   createFaculty, 
-  createAdmin, 
+  createAdmin,
+  changeStatus, 
   getMe, 
 };

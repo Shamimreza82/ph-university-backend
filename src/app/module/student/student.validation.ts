@@ -74,7 +74,7 @@ const createStudentValidationSchema = z.object({
 
 const updateStudentValidationSchema = z.object({
   body: z.object({
-    password: z.string().max(20),
+    password: z.string().max(20).optional(),
     student: z.object({
       // id: z.string().nonempty("ID is required"),
       name: userNameValidationSchema.optional(),
@@ -102,7 +102,7 @@ const updateStudentValidationSchema = z.object({
       permanentAddress: z.string().nonempty('Permanent address is required').optional(),
       guardian: guardianValidationSchema.optional(),
       localGuardian: localGuardianValidationSchema.optional(),
-      profileImg: z.string().url('Invalid URL').optional(),
+      // profileImg: z.string().url('Invalid URL').optional(),
       admissionSemester : z.string().optional(),
       academicDepartment: z.string().optional(),
     }),

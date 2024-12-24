@@ -1,3 +1,4 @@
+
 import mongoose from 'mongoose';
 import { envFile } from '../../../config';
 import { AcademicSemester } from '../academicSemister/academicSemister.model';
@@ -13,9 +14,12 @@ import generateStudentId, {
 } from './user.utils';
 import { TAdmin } from '../admin/admin.interface';
 import { Admin } from '../admin/admin.model';
-import { verifyToken } from '../Auth/auth.ults';
+import { JwtPayload } from 'jsonwebtoken';
+import { sendImageToCloudinary } from '../../utils/sendimageTocliydinary';
 
-const createStudentDB = async (password: string, payload: TStudent) => {
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const createStudentDB = async (password: string, payload: TStudent, file: any) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
@@ -36,6 +40,15 @@ const createStudentDB = async (password: string, payload: TStudent) => {
       admissionSemester as TAcademicSemester,
     );
 
+
+    const imageName = `${userData?.id}${payload?.name?.firstName}`
+    const path = file?.path
+    ///todo image save in data base
+    const {secure_url} = await sendImageToCloudinary(imageName, path) 
+    payload.profileImg = secure_url as string
+  
+    // payload.profileImg = profileImg.secure_url
+
     const newUser = await User.create([userData], { session });
 
     //create a student if user created
@@ -44,6 +57,7 @@ const createStudentDB = async (password: string, payload: TStudent) => {
     }
     payload.id = newUser[0].id;
     payload.user = newUser[0]._id;
+
 
     const newStudent = await Student.create([payload], { session });
     if (!newStudent) {
@@ -129,30 +143,39 @@ const createAdminDB = async (password: string, payload: TAdmin) => {
   }
 };
 
-const getMe = async (token: string) => {
 
-const decoded = verifyToken(token, envFile.jwt_access_secret as string)
 
-  const {userId, role} = decoded
+const changeStatus = async (id: string, payload: {status: string} ) => {
+
+  const result = await User.findByIdAndUpdate(id, payload, {new: true})
+
+return result
+}
+const getMe = async (user: JwtPayload ) => {
+
+  const {userId, role} = user
   console.log(userId, role);
 
   let result = null
   if(role === 'student'){
-    result = await Student.findOne({id: userId})
+    result = await Student.findOne({id: userId}).populate('user')
   } 
 
   if(role === 'admin'){
-    result = await Admin.findOne({id: userId})
+    result = await Admin.findOne({id: userId}).populate('user')
   } 
 
   if(role === 'faculty'){
-    result = await Faculty.findOne({id: userId})
+    result = await Faculty.findOne({id: userId}).populate('user')
   } 
 return result
 }
+
+
 export const UserService = {
   createStudentDB,
   createFacultyDB,
   createAdminDB,
-  getMe
+  getMe,
+  changeStatus
 };
